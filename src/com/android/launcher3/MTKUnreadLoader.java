@@ -93,7 +93,7 @@ public class MTKUnreadLoader extends BroadcastReceiver {
         final String action = intent.getAction();
         if (ProviderConfig.ACTION_UNREAD_CHANGED.equals(action)) {
             ComponentName componentName = (ComponentName) intent
-                    .getExtras().get(ProviderConfig.ACTION_UNREAD_CHANGED);
+                    .getExtras().get(ProviderConfig.EXTRA_UNREAD_COMPONENT);
             //Add BUG_ID:DWYQDSS-275 zhaopenglin 20160714(start)
             if(isGMms && componentName.equals(MmscomponentName)){
                 componentName = new ComponentName("com.google.android.apps.messaging",

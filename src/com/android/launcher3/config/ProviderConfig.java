@@ -27,4 +27,9 @@ public class ProviderConfig {
      * UNREAD_NUMBER 是有未读短信数的extra
      */
     public static final String EXTRA_UNREAD_NUMBER = "com.mediatek.intent.extra.UNREAD_NUMBER";
+    /**
+     * Extra used to indicate the unread number of which component changes.
+     * 获得未读应用的额外信息的component，这个component在intent里的extra里
+     */
+    public static final String EXTRA_UNREAD_COMPONENT = "com.mediatek.intent.extra.UNREAD_COMPONENT";
 }

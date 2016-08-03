@@ -71,7 +71,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+//Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+import android.graphics.Typeface;
+import java.util.Calendar;
+import com.android.launcher3.R;
+//Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
 /**
  * Various utilities shared amongst the Launcher's classes.
  */
@@ -182,6 +186,48 @@ public final class Utilities {
         return createIconBitmap(new BitmapDrawable(context.getResources(), icon), context);
     }
 
+    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+    static Bitmap createCalendarIconBitmap(Drawable icon, Context context){
+	    String[] weekStrings=context.getResources().getStringArray(R.array.weeks_array);
+        Bitmap calendarIcon = createIconBitmap(icon,context);
+        String weekString  = weekStrings[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-1];
+        String dayString  = String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        if(dayString.length()==1) dayString =0 + dayString;
+        synchronized (sCanvas) {
+            final Canvas canvas = sCanvas;
+            canvas.setBitmap(calendarIcon);
+
+            final float mDensity = context.getResources().getDisplayMetrics().density;
+
+            Paint mDatePaint = new Paint();
+            Paint mWeekPaint = new Paint();
+            mDatePaint.setTypeface(Typeface.createFromFile("/system/fonts/Roboto-Thin.ttf"));
+            mWeekPaint.setTextSize((int)8F * mDensity);
+            mDatePaint.setTextSize((int)34F * mDensity);
+            mDatePaint.setColor(0xff000000);
+            mWeekPaint.setColor(0xffff0000);
+            mDatePaint.setAntiAlias(true);
+            mWeekPaint.setAntiAlias(true);
+
+            Rect rect = new Rect();
+            mDatePaint.getTextBounds(dayString,0,dayString.length(),rect);
+            int width1 = rect.right - rect.left;
+            int height1 = rect.bottom - rect.top;
+            int width2 = calendarIcon.getWidth();
+            int height2 = calendarIcon.getHeight();
+
+            Rect rectweek = new Rect();
+            mWeekPaint.getTextBounds(weekString,0,weekString.length(),rectweek);
+            int widthWeek1 = rectweek.right - rectweek.left;
+            int heightWeek1 = rectweek.bottom - rectweek.top;
+
+            canvas.drawText(dayString,(width2 - width1)/2 - rect.left, 8+(height2 - height1)/2 - rect.top,mDatePaint);
+            canvas.drawText(weekString,(width2 - widthWeek1)/2 - rectweek.left,6+heightWeek1/2- rectweek.top,mWeekPaint);
+            canvas.setBitmap(null);
+            return calendarIcon;
+        }
+    }
+    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
     /**
      * Returns a bitmap suitable for the all apps view.
      */

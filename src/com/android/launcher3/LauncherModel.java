@@ -92,6 +92,11 @@ import java.util.Random;
 import android.app.WallpaperManager;
 import java.io.IOException;
 //add by luoran for changewallpaper(end)
+
+//add by zhaopenglin for hide app DWYQLSSB-77 20160617(start)
+import com.android.launcher3.hideapp.HideAppConfig;
+import com.android.launcher3.hideapp.OptDatabase;
+//add by zhaopenglin for hide app DWYQLSSB-77 20160617(end)
 /**
  * Maintains in-memory state of the Launcher. It is expected that there should be only one
  * LauncherModel object held in a static. Also provide APIs for updating the database state
@@ -156,6 +161,10 @@ public class LauncherModel extends BroadcastReceiver
 
     // < only access in worker thread >
     AllAppsList mBgAllAppsList;
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    public static  ArrayList<AppInfo> allAddAppItems = new ArrayList<AppInfo>();
+    public static  ArrayList<AppInfo> hidedAddAppItems = new ArrayList<AppInfo>();
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
     // Entire list of widgets.
     WidgetsModel mBgWidgetsModel;
 
@@ -198,6 +207,11 @@ public class LauncherModel extends BroadcastReceiver
     @Thunk final LauncherAppsCompat mLauncherApps;
     @Thunk final UserManagerCompat mUserManager;
 
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (start)
+    private ArrayList<String> hidePackagenameArrayList =new ArrayList<String>();
+    private OptDatabase OTB;
+    private boolean ishideapp = false;
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (end)
     public interface Callbacks {
         public boolean setLoadOnResume();
         public int getCurrentWorkspaceScreen();
@@ -234,6 +248,7 @@ public class LauncherModel extends BroadcastReceiver
         ///M. ALPS01960480. check it is reordering or not.
         public boolean isReordering();
         ///M.
+        public void showWorkspace();//Add BUG_ID:DWYSBM-362 zhaopenglin 20160707
     }
 
     public interface ItemInfoFilter {
@@ -242,7 +257,10 @@ public class LauncherModel extends BroadcastReceiver
 
     LauncherModel(LauncherAppState app, IconCache iconCache, AppFilter appFilter) {
         Context context = app.getContext();
-
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617(start)
+        OTB = new OptDatabase(context);
+        ishideapp = context.getResources().getBoolean(R.bool.is_support_hideapps);
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617(end)
         mAppsCanBeOnRemoveableStorage = Environment.isExternalStorageRemovable();
         String oldProvider = context.getString(R.string.old_launcher_provider_uri);
         // This may be the same as MIGRATE_AUTHORITY, or it may be replaced by a different
@@ -1379,6 +1397,23 @@ public class LauncherModel extends BroadcastReceiver
 		  setRandomWallapper(context);
 		}
 		//add by luoran for changewallpaper(start)
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+        else if(intent.getAction().toString().equals(HideAppConfig.HIDE_APP_ACTION)){
+            forceReload();
+            if(getCallback() != null) getCallback().showWorkspace();//Add BUG_ID:DWYSBM-362 zhaopenglin 20160707
+        }
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+        else if(context.getResources().getBoolean(R.bool.support_calendar_icon)){
+            if(Intent.ACTION_DATE_CHANGED.equals(action) ||
+                Intent.ACTION_TIME_CHANGED.equals(action) ||
+                Intent.ACTION_TIMEZONE_CHANGED.equals(action)){
+                final String packageName = "com.android.calendar";
+                enqueuePackageUpdated(new PackageUpdatedTask(PackageUpdatedTask.OP_UPDATE,
+                        new String[]{packageName},UserHandleCompat.myUserHandle()));
+            }
+        }
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
     }
      //add by luoran for changewallpaper(start)
 	 public void setRandomWallapper(Context context){
@@ -2024,6 +2059,12 @@ public class LauncherModel extends BroadcastReceiver
                     long serialNumber;
                     Intent intent;
                     UserHandleCompat user;
+                    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (start)
+                    if (ishideapp){
+                        hidePackagenameArrayList.clear();
+                         hidePackagenameArrayList=OTB.queryDB();
+                    }
+                    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (end)
 
                     while (!mStopped && c.moveToNext()) {
                         try {
@@ -2051,6 +2092,12 @@ public class LauncherModel extends BroadcastReceiver
                                     intent = Intent.parseUri(intentDescription, 0);
                                     ComponentName cn = intent.getComponent();
                                     if (cn != null && cn.getPackageName() != null) {
+                                        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (start)
+                                        if(ishideapp&&(hidePackagenameArrayList.contains(cn.getPackageName().toString()))){
+                                            itemsToRemove.add(id);
+                                            continue;
+                                        }
+                                        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 (end)
                                         boolean validPkg = launcherApps.isPackageEnabledForProfile(
                                                 cn.getPackageName(), user);
                                         boolean validComponent = validPkg &&
@@ -3009,6 +3056,7 @@ public class LauncherModel extends BroadcastReceiver
 
             // Clear the list of apps
             mBgAllAppsList.clear();
+            hidedAddAppItems.clear();   //add by zhaopenglin for hide app DWYQLSSB-77 20160617
             for (UserHandleCompat user : profiles) {
                 // Query for the set of apps
                 final long qiaTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
@@ -3030,7 +3078,13 @@ public class LauncherModel extends BroadcastReceiver
                     // This builds the icon bitmaps.
                     mBgAllAppsList.add(new AppInfo(mContext, app, user, mIconCache));
                 }
-
+                //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+                List<LauncherActivityInfoCompat> hidedApps = mLauncherApps.getHidedActivityList();
+                for (int j = 0; j < hidedApps.size(); j++) {
+                    LauncherActivityInfoCompat app = hidedApps.get(j);
+                    hidedAddAppItems.add(new AppInfo(mContext, app, user, mIconCache));
+                }
+                //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
                 final ManagedProfileHeuristic heuristic = ManagedProfileHeuristic.get(mContext, user);
                 if (heuristic != null) {
                     final Runnable r = new Runnable() {
@@ -3059,6 +3113,7 @@ public class LauncherModel extends BroadcastReceiver
             }
             // Huh? Shouldn't this be inside the Runnable below?
             final ArrayList<AppInfo> added = mBgAllAppsList.added;
+            allAddAppItems = mBgAllAppsList.added;  //add by zhaopenglin for hide app DWYQLSSB-77 20160617
             mBgAllAppsList.added = new ArrayList<AppInfo>();
 
             // Post callback on main thread

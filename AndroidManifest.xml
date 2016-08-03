@@ -128,6 +128,11 @@
         </activity>
 
         -->
+        <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 start -->
+        <activity android:name="com.android.launcher3.hideapp.BaseActivity" ></activity>
+        <activity android:name="com.android.launcher3.hideapp.RGKHideAppsActivity" ></activity>
+        <activity android:name="com.android.launcher3.hideapp.RGKDispalyHidedActivity" ></activity>
+        <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 end -->
 
         <!-- M: hide apps activity used to configure apps to be hidden in apps list. -->
         <activity android:name="com.android.launcher3.HideAppsActivity"

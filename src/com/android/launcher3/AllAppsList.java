@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Stores the list of all applications for the all apps view.
  */
-class AllAppsList {
+public class AllAppsList {  //modify by zhaopenglin for hide app DWYQLSSB-77 20160617
     private static final String TAG = "AllAppsList";
 
     public static final int DEFAULT_APPLICATIONS_NUMBER = 42;
@@ -47,7 +47,7 @@ class AllAppsList {
     public ArrayList<AppInfo> data =
             new ArrayList<AppInfo>(DEFAULT_APPLICATIONS_NUMBER);
     /** The list of apps that have been added since the last notify() call. */
-    public ArrayList<AppInfo> added =
+    public static ArrayList<AppInfo> added =    //modify by zhaopenglin for hide app DWYQLSSB-77 20160617
             new ArrayList<AppInfo>(DEFAULT_APPLICATIONS_NUMBER);
     /** The list of apps that have been removed since the last notify() call. */
     public ArrayList<AppInfo> removed = new ArrayList<AppInfo>();

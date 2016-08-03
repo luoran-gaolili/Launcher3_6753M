@@ -67,6 +67,26 @@ public class AppInfo extends ItemInfo {
         itemType = LauncherSettings.BaseLauncherColumns.ITEM_TYPE_SHORTCUT;
     }
 
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    public Bitmap getIconBitmap() {
+        return iconBitmap;
+    }
+
+    public String getTitle(){
+        return title.toString();
+    }
+
+    public String getPackageName() {
+        String packageName = "";
+        if (intent != null) {
+            packageName = intent.getPackage();
+            if (packageName == null && intent.getComponent() != null) {
+                packageName = intent.getComponent().getPackageName();
+            }
+        }
+        return packageName;
+    }
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
     public Intent getIntent() {
         return intent;
     }

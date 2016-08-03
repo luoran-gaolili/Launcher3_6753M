@@ -64,6 +64,8 @@ import java.util.Stack;
 
 import com.mediatek.launcher3.ext.LauncherLog;
 
+import android.graphics.drawable.BitmapDrawable;
+
 /**
  * Cache of application icons.  Icons can be made from any thread.
  */
@@ -116,6 +118,7 @@ public class IconCache {
     private Bitmap mLowResBitmap;
     private Canvas mLowResCanvas;
     private Paint mLowResPaint;
+    private boolean isDynamCalender =false;//Add BUG_ID:DWYSBM-79 zhaopenglin 20160602
 
     public IconCache(Context context, InvariantDeviceProfile inv) {
         mContext = context;
@@ -137,6 +140,7 @@ public class IconCache {
         // automatically be loaded as ALPHA_8888.
         mLowResOptions.inPreferredConfig = Bitmap.Config.RGB_565;
         updateSystemStateString();
+        isDynamCalender = context.getResources().getBoolean(R.bool.support_calendar_icon);//Add BUG_ID:DWYSBM-79 zhaopenglin 20160602
     }
 
     private Drawable getFullResDefaultActivityIcon() {
@@ -260,6 +264,12 @@ public class IconCache {
         for (UserHandleCompat user : mUserManager.getUserProfiles()) {
             // Query for the set of apps
             final List<LauncherActivityInfoCompat> apps = mLauncherApps.getActivityList(null, user);
+            //Add by zhaopenglin for hide app in launcher20160330(start)
+            List<LauncherActivityInfoCompat> hidedApps = mLauncherApps.getHidedActivityList();
+            if(hidedApps != null && hidedApps.size() > 0){
+                apps.addAll(hidedApps);
+            }
+            //Add by zhaopenglin for hide app in launcher20160330(end)
             // Fail if we don't have any apps
             // TODO: Fix this. Only fail for the current user.
             if (apps == null || apps.isEmpty()) {
@@ -390,7 +400,13 @@ public class IconCache {
         }
         if (entry == null) {
             entry = new CacheEntry();
-            entry.icon = Utilities.createIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            //Modify BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+            if(isDynamCalender && app.getComponentName().getPackageName().equals("com.android.calendar")){
+                entry.icon = Utilities.createCalendarIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            }else{
+                entry.icon = Utilities.createIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            }
+            //Modify BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
         }
         entry.title = app.getLabel();
         entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, app.getUser());
@@ -541,6 +557,7 @@ public class IconCache {
      * Retrieves the entry from the cache. If the entry is not present, it creates a new entry.
      * This method is not thread safe, it must be called from a synchronized method.
      */
+    boolean isCalenderInfo;//Add BUG_ID:DWYSBM-79 zhaopenglin 20160602
     private CacheEntry cacheLocked(ComponentName componentName, LauncherActivityInfoCompat info,
             UserHandleCompat user, boolean usePackageIcon, boolean useLowResIcon) {
         if (LauncherLog.DEBUG_LAYOUT) {
@@ -550,14 +567,25 @@ public class IconCache {
 
         ComponentKey cacheKey = new ComponentKey(componentName, user);
         CacheEntry entry = mCache.get(cacheKey);
-        if (entry == null || (entry.isLowResIcon && !useLowResIcon)) {
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+        isCalenderInfo= false;
+        if (info != null){
+            isCalenderInfo = info.getApplicationInfo().packageName.equals("com.android.calendar");
+        }
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
+        if (isCalenderInfo ||entry == null || (entry.isLowResIcon && !useLowResIcon)) {
             entry = new CacheEntry();
             mCache.put(cacheKey, entry);
 
             // Check the DB first.
-            if (!getEntryFromDB(cacheKey, entry, useLowResIcon)) {
+            if (isCalenderInfo || !getEntryFromDB(cacheKey, entry, useLowResIcon)) {
                 if (info != null) {
                     entry.icon = Utilities.createIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
+                    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+                    if(isCalenderInfo && isDynamCalender) {
+                        entry.icon = Utilities.createCalendarIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
+                    }
+                    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
                 } else {
                     if (usePackageIcon) {
                         CacheEntry packageEntry = getEntryForPackageLocked(
@@ -645,7 +673,13 @@ public class IconCache {
                     }
                     Drawable drawable = mUserManager.getBadgedDrawableForUser(
                             appInfo.loadIcon(mPackageManager), user);
-                    entry.icon = Utilities.createIconBitmap(drawable, mContext);
+                    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+                    if(isDynamCalender && packageName.equals("com.android.calendar")){
+                        entry.icon = Utilities.createCalendarIconBitmap(drawable, mContext);
+                    }else{
+                        entry.icon = Utilities.createIconBitmap(drawable, mContext);
+			        }
+                    //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
                     entry.title = appInfo.loadLabel(mPackageManager);
                     entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, user);
                     entry.isLowResIcon = false;

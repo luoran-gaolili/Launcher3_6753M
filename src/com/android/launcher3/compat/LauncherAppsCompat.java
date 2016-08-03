@@ -65,6 +65,7 @@ public abstract class LauncherAppsCompat {
 
     public abstract List<LauncherActivityInfoCompat> getActivityList(String packageName,
             UserHandleCompat user);
+	public abstract List<LauncherActivityInfoCompat>  getHidedActivityList();//Add by zhaopenglin for hide app in launcher20160330
     public abstract LauncherActivityInfoCompat resolveActivity(Intent intent,
             UserHandleCompat user);
     public abstract void startActivityForProfile(ComponentName component, UserHandleCompat user,

@@ -209,4 +209,11 @@ public class LauncherAppsCompatV16 extends LauncherAppsCompat {
             }
         }
     }
+    //Add by zhaopenglin for hide app in launcher20160330(start)
+    @Override
+    public List<LauncherActivityInfoCompat> getHidedActivityList() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    //Add by zhaopenglin for hide app in launcher20160330(end)
 }

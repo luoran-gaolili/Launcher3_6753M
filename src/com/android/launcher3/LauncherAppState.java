@@ -34,6 +34,7 @@ import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.PackageInstallerCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.util.Thunk;
+import com.android.launcher3.hideapp.HideAppConfig;//add by zhaopenglin for hide app DWYQLSSB-77 20160617
 
 import com.mediatek.launcher3.ext.LauncherLog;
 
@@ -52,6 +53,8 @@ public class LauncherAppState {
 
     private static WeakReference<LauncherProvider> sLauncherProvider;
     private static Context sContext;
+
+    private static boolean isHideAppsFeature;//add by zhaopenglin for hide app DWYQLSSB-77 20160617
 
     private static LauncherAppState INSTANCE;
 
@@ -73,7 +76,11 @@ public class LauncherAppState {
     public static LauncherAppState getInstanceNoCreate() {
         return INSTANCE;
     }
-
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    public static boolean getIsHideAppsFeature() {
+        return isHideAppsFeature;
+    }
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
     public Context getContext() {
         return sContext;
     }
@@ -109,6 +116,13 @@ public class LauncherAppState {
         // Register intent receivers
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
+        if(sContext.getResources().getBoolean(R.bool.support_calendar_icon)){
+            filter.addAction(Intent.ACTION_TIME_CHANGED);
+            filter.addAction(Intent.ACTION_DATE_CHANGED);
+            filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        }
+        //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
         filter.addAction(SearchManager.INTENT_GLOBAL_SEARCH_ACTIVITY_CHANGED);
         // For handling managed profiles
         filter.addAction(LauncherAppsCompat.ACTION_MANAGED_PROFILE_ADDED);
@@ -118,6 +132,7 @@ public class LauncherAppState {
             filter.addAction(WALLPAPER_ACTION);
 //		}
 		//add by luoran for changewallpaper(start)
+		filter.addAction(HideAppConfig.HIDE_APP_ACTION); //add by zhaopenglin for hide app DWYQLSSB-77 20160617
         if (LauncherLog.DEBUG) {
             LauncherLog.d(TAG, "LauncherAppState: mIconCache = " + mIconCache + ", mModel = "
                     + mModel + ", this = " + this);
@@ -127,6 +142,7 @@ public class LauncherAppState {
         UserManagerCompat.getInstance(sContext).enableAndResetCache();
 
         mPowerManager = (PowerManager) sContext.getSystemService(Context.POWER_SERVICE);
+        isHideAppsFeature = sContext.getResources().getBoolean(R.bool.is_support_hideapps);//add by zhaopenglin for hide app DWYQLSSB-77 20160617
 
     }
 

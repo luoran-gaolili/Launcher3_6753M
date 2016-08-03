@@ -139,6 +139,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+//add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+import com.android.launcher3.hideapp.BaseActivity;
+import com.android.launcher3.hideapp.RGKDispalyHidedActivity;
+import com.android.launcher3.hideapp.RGKHideAppsActivity;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.widget.SimpleAdapter;
+import java.util.Map;
+//add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
 /**
  * Default launcher application.
  */
@@ -463,6 +473,7 @@ public class Launcher extends Activity
     /// M: Disable applist white background for jitter performance issue {@
     public static boolean DISABLE_APPLIST_WHITE_BG = true;
     public static final String PROP_DISABLE_APPLIST_WHITE_BG = "launcher.whitebg.disable";
+    private Dialog customizDialog;//add by zhaopenglin for hide app DWYQLSSB-77 20160617
     // should kill and restart launcher process to re-execute static block if reset properties
     // adb shell setprop launcher.applist.whitebg.disable true/false
     // adb shell stop
@@ -628,6 +639,7 @@ public class Launcher extends Activity
             showFirstRunActivity();
             showFirstRunClings();
         }
+        customizDialog = customizDialog();//add by zhaopenglin for DWYQLSSB-77 20160617
     }
 
     @Override
@@ -1515,6 +1527,12 @@ public class Launcher extends Activity
                 savedState.getSerializable(RUNTIME_STATE_VIEW_IDS);
     }
 
+
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    public void onClickCustomizButton(View v){
+        customizDialog.show();
+    }
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
     /**
      * Finds all the views we need and configure them properly.
      */
@@ -1632,6 +1650,86 @@ public class Launcher extends Activity
             mWeightWatcher.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    private Dialog customizDialog() {
+        String[] names = new String[] {
+                getResources().getString(R.string.customizhideapps),
+                getResources().getString(R.string.displayhidedapp),
+                //getResources().getString(R.string.theme),
+                //getResources().getString(R.string.changebg),
+                };
+        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+
+        for (int i = 0; i < names.length; i++) {
+            Map<String, Object> listItem = new HashMap<String, Object>();
+            listItem.put("personName", names[i]);
+            listItems.add(listItem);
+        }
+
+        SimpleAdapter simpleAdapter = (SimpleAdapter) new SimpleAdapter(this,
+                listItems, R.layout.set_wallpaper_dialog_row,
+                new String[] { "personName" }, new int[] { R.id.name });
+        TextView title = new TextView(this);
+        title.setHeight(100);
+        title.setTextSize(20);
+        title.setTextColor(Color.GREEN);
+        title.setText(getResources().getString(R.string.hidedialogetitle));
+        title.setGravity(Gravity.CENTER);
+
+        Dialog dialog = new AlertDialog.Builder(this)
+                            .setCustomTitle(title)
+                            .setAdapter(simpleAdapter, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // TODO Auto-generated method stub
+                                    setCustomiz(which);
+                                    dialog.dismiss();
+                                }
+                            }).create();
+        return dialog;
+    }
+    private void setCustomiz(int id) {
+
+        switch (id) {
+        case 0:
+             if (!mWorkspace.isSwitchingState()) {
+                    Intent intent=new Intent(Launcher.this,RGKHideAppsActivity.class);
+                    startActivity(intent);
+                }
+            break;
+        case 1:
+             if (!mWorkspace.isSwitchingState()) {
+                 Intent intent=new Intent(Launcher.this,RGKDispalyHidedActivity.class);
+                    startActivity(intent);
+             }
+            break;
+        /*case 2:
+            if(Workspace.isTransBG){
+                Workspace.isTransBG=!Workspace.isTransBG;
+                getDragLayer().setBackgroundAlpha(1f);
+            }else {
+                Workspace.isTransBG=!Workspace.isTransBG;
+                getDragLayer().setBackgroundAlpha(0.5f);
+            }
+            break;
+
+        case 3:
+            Intent themeIntent = new Intent();
+            ComponentName com = new ComponentName("com.rgk.theme", "com.rgk.theme.ThemeActivity");
+            themeIntent.setComponent(com);
+            try{
+            startActivity(themeIntent);}catch(Exception e){
+               e.printStackTrace();
+            }
+            break;
+        */
+        default:
+            break;
+        }
+
+    }
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
 
     /**
      * Sets the all apps button. This method is called from {@link Hotseat}.
@@ -2076,6 +2174,11 @@ public class Launcher extends Activity
         if (DEBUG_RESUME_TIME) {
             startTime = System.currentTimeMillis();
         }
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+        if (customizDialog.isShowing()) {
+            customizDialog.dismiss();
+        }
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
         super.onNewIntent(intent);
         if (LauncherLog.DEBUG) {
             LauncherLog.d(TAG, "onNewIntent: intent = " + intent);
@@ -4144,6 +4247,14 @@ public class Launcher extends Activity
             populateCustomContentContainer();
         }
     }
+
+    //Add BUG_ID:DWYSBM-362 zhaopenglin 20160707(start)
+    @Override
+    public void showWorkspace() {
+        // TODO Auto-generated method stub
+        showWorkspace(false);
+    }
+    //Add BUG_ID:DWYSBM-362 zhaopenglin 20160707(end)
 
     @Override
     public void bindAddScreens(ArrayList<Long> orderedScreenIds) {

@@ -105,4 +105,9 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
     <!-- Add by luoran for keyguard wallpaper end -->
+    <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 start -->
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+		<item name="android:button">@drawable/checkbox_style</item>
+    </style>
+    <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 end -->
 </resources>

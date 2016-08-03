@@ -289,5 +289,23 @@
 	<string name="storage_low">"storage is low"</string>
 	<string name="folder_name_google">"Google"</string>
     <string name="folder_name_system">"System Tools"</string>
-	<string name="folder_name_Amazon">"Amazon"</string>
+    <string name="folder_name_Amazon">"Amazon"</string>
+    <string name="folder_name_Download">"Download"</string>
+    <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 start -->
+    <string name="app_name">MultiSelect</string>
+    <string name="hide_apps">Hide Apps</string>
+    <string name="display_apps">Display Apps</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_all_text">Select all</string>
+    <string name="dialog_hide_title">Hide App</string>
+    <string name="dialog_display_title">Display Hided App</string>
+    <string name="dialog_hide_app">The seleced apps will be hide</string>
+    <string name="dialog_display_hidedapp">The seleced hided apps will display</string>
+    <string name="hidedialogetitle">Customize</string>
+    <string name="customizhideapps">Hide Apps</string>
+    <string name="displayhidedapp">Display hided app</string>
+    <string name="theme">Theme</string>
+    <string name="changebg">Change BG transparency</string>
+    <string name="customiz_button_text">Customize</string>
+    <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 end -->
 </resources>

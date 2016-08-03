@@ -33,18 +33,28 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.R;
 import android.util.Log;
 
+import com.android.launcher3.hideapp.OptDatabase;    //add by zhaopenglin for hide app DWYQLSSB-77 20160617
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class LauncherAppsCompatVL extends LauncherAppsCompat {
 
     private LauncherApps mLauncherApps;
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+    private ArrayList<String> packagenameArrayList =new ArrayList<String>();
+    private OptDatabase OTB;
+    private ArrayList<LauncherActivityInfoCompat> hidedcompatList =new ArrayList<LauncherActivityInfoCompat>();
+    //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
 
     private Map<OnAppsChangedCallbackCompat, WrappedCallback> mCallbacks
             = new HashMap<OnAppsChangedCallbackCompat, WrappedCallback>();
 
     //Add by zhaopenglin for hide app in launcher20160330(start)
+    private ArrayList<LauncherActivityInfoCompat> hidedCompatList =
+        new ArrayList<LauncherActivityInfoCompat>(4);
     private Context mContext;
     private List<String> hideappsArrayList = new ArrayList<String>();
     //Add by zhaopenglin for hide app in launcher20160330(end)
@@ -53,36 +63,64 @@ public class LauncherAppsCompatVL extends LauncherAppsCompat {
         super();
         mLauncherApps = (LauncherApps) context.getSystemService("launcherapps");
         mContext = context;//Add by zhaopenglin for hide app in launcher20160330
+        OTB=new OptDatabase(context);//add by zhaopenglin for hide app DWYQLSSB-77 20160617
     }
 
     public List<LauncherActivityInfoCompat> getActivityList(String packageName,
             UserHandleCompat user) {
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
+        hidedcompatList.clear();
+        packagenameArrayList.clear();
+        packagenameArrayList = OTB.queryDB();
+        //add by zhaopenglin for hide app DWYQLSSB-77 20160617 end
         List<LauncherActivityInfo> list = mLauncherApps.getActivityList(packageName,
                 user.getUser());
         if (list.size() == 0) {
             return Collections.emptyList();
         }
+
         ArrayList<LauncherActivityInfoCompat> compatList =
                 new ArrayList<LauncherActivityInfoCompat>(list.size());
         //Add by zhaopenglin for hide app in launcher20160330(start)
         hideappsArrayList= Arrays.asList(mContext.getResources().getStringArray(R.array.hide_apps_arraylist));
         Log.i("hideapps","hideappsArrayList:"+hideappsArrayList);
-        if(hideappsArrayList.size() > 0){
+        if (LauncherAppState.getIsHideAppsFeature()) {
             for (LauncherActivityInfo info : list) {
                 LauncherActivityInfoCompatVL launcherActivityInfoCompatVL =new LauncherActivityInfoCompatVL(info);
-                if(!hideappsArrayList.contains((launcherActivityInfoCompatVL).getApplicationInfo().packageName)){
+                if(!packagenameArrayList.contains((launcherActivityInfoCompatVL).getApplicationInfo().packageName)){
                     compatList.add(launcherActivityInfoCompatVL);
                 }
+                else {
+                    hidedcompatList.add(launcherActivityInfoCompatVL);
+                }
             }
-        }else{
-        //Add by zhaopenglin for hide app in launcher20160330(end)
-            for (LauncherActivityInfo info : list) {
-                compatList.add(new LauncherActivityInfoCompatVL(info));
+            OTB.closeDB();
+        }else {
+            //Add by zhaopenglin for hide app in launcher20160330(start)
+            if(hideappsArrayList.size() > 0){
+                for (LauncherActivityInfo info : list) {
+                    LauncherActivityInfoCompatVL launcherActivityInfoCompatVL =new LauncherActivityInfoCompatVL(info);
+                    if(!hideappsArrayList.contains((launcherActivityInfoCompatVL).getApplicationInfo().packageName)){
+                        compatList.add(launcherActivityInfoCompatVL);
+                    }else {
+                        hidedCompatList.add(launcherActivityInfoCompatVL);
+                    }
+                }
+            }else{
+            //Add by zhaopenglin for hide app in launcher20160330(end)
+                for (LauncherActivityInfo info : list) {
+                    compatList.add(new LauncherActivityInfoCompatVL(info));
+                }
             }
         }
         return compatList;
     }
-
+    //Add by zhaopenglin for hide app in launcher20160330(start)
+    public List<LauncherActivityInfoCompat> getHidedActivityList() {
+        if(LauncherAppState.getIsHideAppsFeature()) return hidedcompatList; //add by zhaopenglin for hide app DWYQLSSB-77 20160617
+        return hidedCompatList;
+    }
+    //Add by zhaopenglin for hide app in launcher20160330(end)
     public LauncherActivityInfoCompat resolveActivity(Intent intent, UserHandleCompat user) {
         LauncherActivityInfo activity = mLauncherApps.resolveActivity(intent, user.getUser());
         if (activity != null) {

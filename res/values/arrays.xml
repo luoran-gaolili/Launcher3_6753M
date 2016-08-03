@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="hide_apps_arraylist">
+    <!--add packagename of the hide app in the overlay,this array must be empty-->
+    </string-array>
+
+</resources>

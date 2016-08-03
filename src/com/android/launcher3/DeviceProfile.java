@@ -201,7 +201,8 @@ public class DeviceProfile {
                 res.getDimensionPixelSize(R.dimen.dynamic_grid_search_bar_max_width));
         searchBarSpaceHeightPx = getSearchBarTopOffset()
                 + res.getDimensionPixelSize(R.dimen.dynamic_grid_search_bar_height);
-
+        //将searchBarSpaceHeightPx改小一些使得workspace上方空隙少一些
+        if(res.getBoolean(R.bool.is_rm_qsb)) searchBarSpaceHeightPx /= 3;
         // Calculate the actual text height
         Paint textPaint = new Paint();
         textPaint.setTextSize(iconTextSizePx);

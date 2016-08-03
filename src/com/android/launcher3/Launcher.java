@@ -3966,6 +3966,8 @@ public class Launcher extends Activity
     }
 
     public View getOrCreateQsbBar() {
+        //return null 就可以达到去掉QSB bar的目的
+        if(getResources().getBoolean(R.bool.is_rm_qsb)) return null;
         if (mLauncherCallbacks != null && mLauncherCallbacks.providesSearch()) {
             return mLauncherCallbacks.getQsbBar();
         }

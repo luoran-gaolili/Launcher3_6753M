@@ -547,6 +547,9 @@ public class Launcher extends Activity
             // initialize unread loader
             mUnreadLoader.initialize(this);
             mUnreadLoader.loadAndInitUnreadShortcuts();
+
+            //注册未读短信数据库监听者
+            new UnreadContentObserver(this).getUnreadMms();
         }
         /**@}**/
 
@@ -3160,7 +3163,7 @@ public class Launcher extends Activity
         if (LOGD) Log.d(TAG, "onClickWallpaperPicker");
 		 // Modify by luoran for keyguard wallpaper begin
         //if ("0".equals(android.os.SystemProperties.get("ro.rgk_k_wallpaper_support"))) {
-        if (false) {
+        if (true) {
         	startActivityForResult(new Intent(Intent.ACTION_SET_WALLPAPER).setPackage(getPackageName()),
                 REQUEST_PICK_WALLPAPER);
 			if (mLauncherCallbacks != null) {

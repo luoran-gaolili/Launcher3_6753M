@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Xml;
 import android.view.View;
 
@@ -65,6 +66,7 @@ class UnreadSupportShortcut {
  */
 public class MTKUnreadLoader extends BroadcastReceiver {
     private static final String TAG = "MTKUnreadLoader";
+    private static final String TAGzhao = "zhao11unread.MTKUnreadLoader";
     private static final String TAG_UNREADSHORTCUTS = "unreadshortcuts";
 
     private static final ArrayList<UnreadSupportShortcut> UNREAD_SUPPORT_SHORTCUTS =
@@ -91,9 +93,11 @@ public class MTKUnreadLoader extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         final String action = intent.getAction();
+        Log.i(TAGzhao, "action:" + action);
         if (ProviderConfig.ACTION_UNREAD_CHANGED.equals(action)) {
             ComponentName componentName = (ComponentName) intent
                     .getExtras().get(ProviderConfig.EXTRA_UNREAD_COMPONENT);
+            Log.i(TAGzhao, "componentName:" + componentName);
             //Add BUG_ID:DWYQDSS-275 zhaopenglin 20160714(start)
             if(isGMms && componentName.equals(MmscomponentName)){
                 componentName = new ComponentName("com.google.android.apps.messaging",
@@ -101,6 +105,7 @@ public class MTKUnreadLoader extends BroadcastReceiver {
             }
             //Add BUG_ID:DWYQDSS-275 zhaopenglin 20160714(end)
             final int unreadNum = intent.getIntExtra(ProviderConfig.EXTRA_UNREAD_NUMBER, -1);
+            Log.i(TAGzhao, "unreadNum:" + unreadNum);
             if (LauncherLog.DEBUG) {
                 LauncherLog.d(TAG, "Receive unread broadcast: componentName = " + componentName
                         + ", unreadNum = " + unreadNum + ", mCallbacks = " + mCallbacks

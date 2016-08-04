@@ -158,6 +158,7 @@ public class Launcher extends Activity
                    View.OnTouchListener, PageSwitchListener, LauncherProviderChangeListener,
                    MTKUnreadLoader.UnreadCallbacks {
     static final String TAG = "Launcher";
+    static final String TAGzhao = "zhao11unread.Launcher";
     static final boolean LOGD = false;
 
     static final boolean PROFILE_STARTUP = false;
@@ -539,17 +540,26 @@ public class Launcher extends Activity
                 + getResources().getBoolean(R.bool.config_unreadSupport));
         }
         if (getResources().getBoolean(R.bool.config_unreadSupport)) {
+            /**
+             * 开发的过程中发现已送一个广播结果接收了多次
+             * 原因是因为这个接收者重复注册了多次（注册几个会重复接收几次）
+             */
             mUnreadLoader = new MTKUnreadLoader(getApplicationContext());
             // Register unread change broadcast.
+
             IntentFilter filter = new IntentFilter();
             filter.addAction(ProviderConfig.ACTION_UNREAD_CHANGED);
+            Log.i(TAGzhao,"注册了unread接受者");
             registerReceiver(mUnreadLoader, filter);
             // initialize unread loader
             mUnreadLoader.initialize(this);
             mUnreadLoader.loadAndInitUnreadShortcuts();
 
-            //注册未读短信数据库监听者
-            new UnreadContentObserver(this).getUnreadMms();
+            /**
+             * 注册未读短信数据库监听者
+             * 将这个发送者改为单例模式这样注册就会只注册一个，避免重复注册
+             */
+            UnreadContentObserver.getUnreadContentObserver(this).getUnreadMms();
         }
         /**@}**/
 

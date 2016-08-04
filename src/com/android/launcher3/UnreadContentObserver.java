@@ -1,15 +1,12 @@
 package com.android.launcher3;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.CallLog;
 import android.provider.Telephony;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,10 +18,18 @@ import com.android.launcher3.config.ProviderConfig;
  */
 public class UnreadContentObserver {
     Context mcontext;
+    private static UnreadContentObserver unreadContentObserver;
     private static final String TAGzhao = "zhao11unread.UnreadContentObserver";
-    public  UnreadContentObserver(Context context){
+    private  UnreadContentObserver(Context context){
         mcontext = context;
         registerObserver();
+    }
+
+    public static UnreadContentObserver getUnreadContentObserver(Context context){
+        if (unreadContentObserver == null){
+            unreadContentObserver = new UnreadContentObserver(context);
+        }
+        return unreadContentObserver;
     }
     /**
      * 一、未读短信
@@ -49,7 +54,7 @@ public class UnreadContentObserver {
         mNewSmsCount = getNewSmsCount() + getNewMmsCount();
         Log.i("zhao11unread", "mNewSmsCount:" + mNewSmsCount);
         if(mNewSmsCount != 0)
-            Log.i(TAGzhao,"getUnreadMms发送广播了："+mNewSmsCount);
+            Log.i(TAGzhao,"getUnreadMms222222发送广播了："+mNewSmsCount);
             broadcastUnreadMessageNumber(mcontext,mNewSmsCount);
             Toast.makeText(mcontext,"未读短信数："+mNewSmsCount,Toast.LENGTH_SHORT).show();
     }

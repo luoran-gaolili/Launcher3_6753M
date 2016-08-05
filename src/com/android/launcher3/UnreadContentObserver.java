@@ -116,10 +116,12 @@ public class UnreadContentObserver {
         }
         return result;
     }
-    /*
-    二、未接来电
-    未接来电不能用 Observer监听，不过当有新的未接来电时，系统会发送一个广播com.android.phone.NotificationMgr.MissedCall_intent（锁屏上显示的未接来电数量就是通知监听这个广播实现的）
-    */
+    /**
+     *  二、未接来电
+     *  未接来电不能用 Observer监听，不过当有新的未接来电时，
+     *  系统会发送一个广播com.android.phone.NotificationMgr.MissedCall_intent
+     * （锁屏上显示的未接来电数量就是通知监听这个广播实现的）
+     */
 //    final IntentFilter filter = new IntentFilter();
 //    filter.addAction("com.android.phone.NotificationMgr.MissedCall_intent");
 //    final Application application = getApplication();
@@ -132,10 +134,11 @@ public class UnreadContentObserver {
 //            }
 //        }
 //    }, filter);
-    /*
-    广播只是当有新的未接来电时才会发送，但是如果有旧的未接来电没有读取时，上面的广播就得不到数据了，那就必须得从数据库中查找了。
-    功能代码如下
-    */
+
+    /**
+     * 广播只是当有新的未接来电时才会发送，但是如果有旧的未接来电没有读取时，
+     * 上面的广播就得不到数据了，那就必须得从数据库中查找了。功能代码如下
+     */
 //    private int readMissCall() {
 //        int result = 0;
 //        Cursor cursor = mcontext.getContentResolver().query(Calls.CONTENT_URI, new String[] {

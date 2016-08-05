@@ -470,6 +470,12 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
 
         // Start the drag
         mLauncher.getWorkspace().beginDragShared(v, mIconLastTouchPos, this, false);
+
+        /**
+         * linlindrag
+         * 从allapp里长按icon后显示的workspace界面是spring界面
+         * 和在workspace界面直接长按icon的只隐藏QSB显示出“删除”字样的还不一样
+         */
         // Enter spring loaded mode
         mLauncher.enterSpringLoadedDragMode();
 

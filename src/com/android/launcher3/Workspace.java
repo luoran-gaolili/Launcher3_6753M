@@ -2340,6 +2340,10 @@ public class Workspace extends PagedView
 
     @Override
     public void startDrag(CellLayout.CellInfo cellInfo, boolean accessible) {
+
+        //抛异常法来看看堆栈顺序
+        if(false) throw new RuntimeException("我的异常：");//linlindrag
+
         View child = cellInfo.cell;
         if (LauncherLog.DEBUG_DRAG) {
             LauncherLog.d(TAG, "startDrag cellInfo = " + cellInfo + ",child = " + child);
@@ -2375,12 +2379,24 @@ public class Workspace extends PagedView
         beginDragShared(child, this, accessible);
     }
 
+    /**
+     * linlindrag
+     * @param child 这个参数是当前按下的那个icon的view
+     * @param source
+     * @param accessible
+     */
     public void beginDragShared(View child, DragSource source, boolean accessible) {
         beginDragShared(child, new Point(), source, accessible);
     }
 
+    /**
+     * linlindrag
+     * 首先这个方法不管在workspace界面直接拖拽还是在allapp界面拖拽icon的时候都会调用到这里
+     * 这个方法名字我直译一下是：共享的开始拖拽方法。意思是共享的 我这么理解的 ^_^
+     */
     public void beginDragShared(View child, Point relativeTouchPos, DragSource source,
             boolean accessible) {
+        if(false) throw new RuntimeException("我的异常：");//linlindrag
         child.clearFocus();
         child.setPressed(false);
 

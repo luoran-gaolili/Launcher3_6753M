@@ -36,7 +36,7 @@ public class UnreadContentObserver {
      *首先注册Observer，当有新短信或彩信来的时候会调用 onChange方法，
      *我们可以在onChange方法中去获取未读短信和彩信，然后做一些UI上的处理！
      */
-    int oldeNum = 0;
+    int oldeNum = -1;
     int mNewSmsCount = 0;
     private ContentObserver newMmsContentObserver = new ContentObserver(new Handler()) {
         public void onChange(boolean selfChange) {

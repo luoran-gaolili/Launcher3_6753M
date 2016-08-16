@@ -426,7 +426,8 @@ public class IconCache {
             if(isDynamCalender && app.getComponentName().getPackageName().equals("com.android.calendar")){
                 entry.icon = Utilities.createCalendarIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
             }else{
-                entry.icon = Utilities.createIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+                //entry.icon = Utilities.createIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+                entry.icon = Utilities.createIconBitmapWithMask(app.getBadgedIcon(mIconDpi), maskBitmap, bgBitmap, mContext);
             }
             //Modify BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
         }
@@ -604,7 +605,7 @@ public class IconCache {
                 if (info != null) {
                     //Modify by zhaopenglin for modify icon 20160816 start
                     //entry.icon = Utilities.createIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
-                    entry.icon = Utilities.createIconBitmapWithMask(info.getBadgedIcon(mIconDpi),null,null,mContext);
+                    entry.icon = Utilities.createIconBitmapWithMask(info.getBadgedIcon(mIconDpi),maskBitmap,bgBitmap,mContext);
                     //Modify by zhaopenglin for modify icon 20160816 end
                     //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(start)
                     if(isCalenderInfo && isDynamCalender) {
@@ -664,7 +665,9 @@ public class IconCache {
             entry.title = title;
         }
         if (icon != null) {
-            entry.icon = Utilities.createIconBitmap(icon, mContext);
+            //entry.icon = Utilities.createIconBitmap(icon, mContext);
+            entry.icon = Utilities.createIconBitmapWithMask(
+                    new BitmapDrawable(mContext.getResources(), icon),maskBitmap,bgBitmap,mContext);
         }
     }
 
@@ -702,7 +705,8 @@ public class IconCache {
                     if(isDynamCalender && packageName.equals("com.android.calendar")){
                         entry.icon = Utilities.createCalendarIconBitmap(drawable, mContext);
                     }else{
-                        entry.icon = Utilities.createIconBitmap(drawable, mContext);
+                        //entry.icon = Utilities.createIconBitmap(drawable, mContext);
+                        entry.icon = Utilities.createIconBitmapWithMask(drawable, maskBitmap, bgBitmap, mContext);
 			        }
                     //Add BUG_ID:DWYSBM-79 zhaopenglin 20160602(end)
                     entry.title = appInfo.loadLabel(mPackageManager);

@@ -51,6 +51,7 @@ import java.util.HashSet;
  */
 public class DragController {
     private static final String TAG = "Launcher.DragController";
+    private static final String TAGzhao = "zhaosearch.Launcher.DragController";
 
     /** Indicates the drag is a move.  */
     public static int DRAG_ACTION_MOVE = 0;
@@ -187,6 +188,7 @@ public class DragController {
      */
     public void startDrag(View v, Bitmap bmp, DragSource source, Object dragInfo,
             Rect viewImageBounds, int dragAction, float initialDragViewScale) {
+        Log.i(TAGzhao,"startDrag11");
         int[] loc = mCoordinatesTemp;
         mLauncher.getDragLayer().getLocationInDragLayer(v, loc);
         int dragLayerX = loc[0] + viewImageBounds.left
@@ -220,6 +222,7 @@ public class DragController {
     public DragView startDrag(Bitmap b, int dragLayerX, int dragLayerY,
             DragSource source, Object dragInfo, int dragAction, Point dragOffset, Rect dragRegion,
             float initialDragViewScale, boolean accessible) {
+        Log.i(TAGzhao,"startDrag22233");
         if (PROFILE_DRAWING_DURING_DRAG) {
             android.os.Debug.startMethodTracing("Launcher");
         }
@@ -396,6 +399,7 @@ public class DragController {
     }
 
     private void endDrag() {
+        Log.i(TAGzhao,"endDrag");
         if (LauncherLog.DEBUG_DRAG) {
             LauncherLog.d(TAG, "endDrag: mDragging = " + mDragging
                 + ", mDragObject = " + mDragObject);

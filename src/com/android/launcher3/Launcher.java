@@ -158,6 +158,7 @@ public class Launcher extends Activity
                    View.OnTouchListener, PageSwitchListener, LauncherProviderChangeListener,
                    MTKUnreadLoader.UnreadCallbacks {
     static final String TAG = "Launcher";
+    static final String TAGzhao = "zhaosearch.Launcher";
     static final boolean LOGD = false;
 
     static final boolean PROFILE_STARTUP = false;
@@ -513,7 +514,7 @@ public class Launcher extends Activity
         }
 
         super.onCreate(savedInstanceState);
-
+        Log.i(TAGzhao,"onCreate");
         LauncherAppState.setApplicationContext(getApplicationContext());
         LauncherAppState app = LauncherAppState.getInstance();
 
@@ -3628,6 +3629,12 @@ public class Launcher extends Activity
                                 longClickCellInfo.cellX,
                                 longClickCellInfo.cellY));
                 if (!(itemUnderLongClick instanceof Folder || isAllAppsButton)) {
+                    //下边这三句话是隐藏状态栏的语句
+                    View decorView = getWindow().getDecorView();
+                     // Hide the status bar.
+                    int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                    decorView.setSystemUiVisibility(uiOptions);
+
                     // User long pressed on an item
                     mWorkspace.startDrag(longClickCellInfo);
                 }

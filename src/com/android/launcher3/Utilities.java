@@ -192,9 +192,9 @@ public final class Utilities {
     }
 
     //add by zhaopenglin for modify icon 20160816 start
-    static Bitmap createIconBitmapWithMask(Drawable icon, Bitmap maskIcon, Bitmap bgIcon, Context context) {
+    static Bitmap createIconBitmapWithMask(Drawable icon, Bitmap maskIcon, Bitmap bgIcon, Context context,boolean noNeedMask) {
         Bitmap composeBitmap =  createIconBitmap(icon, context);
-        if(maskIcon == null & bgIcon == null) return composeBitmap;
+        if(noNeedMask||(maskIcon == null & bgIcon == null)) return composeBitmap;
         int width = composeBitmap.getWidth();
         int height = composeBitmap.getHeight();
 

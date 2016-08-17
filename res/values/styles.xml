@@ -72,8 +72,7 @@
         <item name="android:paddingRight">25dp</item>
         <item name="android:textColor">#FFFFFFFF</item>
         <item name="android:textSize">@dimen/drop_target_text_size</item>
-        <item name="android:singleLine">false</item>
-        <item name="android:maxLines">2</item>
+        <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:shadowColor">#FF000000</item>
         <item name="android:shadowDx">0.0</item>

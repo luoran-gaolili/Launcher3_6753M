@@ -287,7 +287,7 @@ public class Launcher extends Activity
     private View mAllAppsButton;
     private View mWidgetsButton;
 
-    private SearchDropTargetBar mSearchDropTargetBar;
+    protected SearchDropTargetBar mSearchDropTargetBar;
 
     // Main container view for the all apps screen.
     @Thunk AllAppsContainerView mAppsView;
@@ -489,7 +489,10 @@ public class Launcher extends Activity
     ///M.
 
     private String mCurrentQsbPkgName;
-
+    //add zhao  for hide QSB on lefty start
+    protected boolean isHideQSB=false;
+    protected boolean isRunOnpause=false;
+    //add zhao  for hide QSB on lefty end
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (DEBUG_STRICT_MODE) {
@@ -1250,7 +1253,9 @@ public class Launcher extends Activity
         // We call onHide() aggressively. The custom content callbacks should be able to
         // debounce excess onHide calls.
         if (mWorkspace.getCustomContentCallbacks() != null) {
+            isRunOnpause =true; //add zhao  for hide QSB on lefty
             mWorkspace.getCustomContentCallbacks().onHide();
+            isRunOnpause =false; //add zhao  for hide QSB on lefty
         }
 
         if (mLauncherCallbacks != null) {

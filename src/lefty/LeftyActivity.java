@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
+import com.android.launcher3.SearchDropTargetBar;
 import com.android.launcher3.Utilities;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -164,8 +165,11 @@ public class LeftyActivity extends Launcher implements LauncherActivityUpdater.U
                 if (fromResume) {
                     return;
                 }
-
-
+                //add zhao for hide QSB on lefty start
+                isHideQSB = true;
+                if (mSearchDropTargetBar != null) mSearchDropTargetBar.animateToState(
+                        SearchDropTargetBar.State.INVISIBLE, 0);
+                //add zhao for hide QSB on lefty end
                 if (CommonsUtils.isConnectedToInternet(LeftyActivity.this)) {
 
                     if (TextUtils.isEmpty(getAppTypeFromPref())) {
@@ -274,7 +278,11 @@ public class LeftyActivity extends Launcher implements LauncherActivityUpdater.U
 
             @Override
             public void onHide() {
-
+                //add zhao for hide QSB on lefty start
+                isHideQSB=false;
+                if (!isRunOnpause && mSearchDropTargetBar != null) mSearchDropTargetBar.animateToState(
+                        SearchDropTargetBar.State.SEARCH_BAR, 0);
+                //add zhao for hide QSB on lefty end
                 if (mBannerCountdowntimer != null) {
                     mBannerCountdowntimer.cancel();
                     mBannerCountdowntimer = null;
@@ -465,6 +473,10 @@ public class LeftyActivity extends Launcher implements LauncherActivityUpdater.U
     protected void onResume() {
         super.onResume();
         //ViewServer.get(this).setFocusedWindow(this);
+        //add zhao for hide QSB on lefty start
+        if (isHideQSB && mSearchDropTargetBar != null) mSearchDropTargetBar.animateToState(
+                SearchDropTargetBar.State.INVISIBLE, 0);
+        //add zhao for hide QSB on lefty end
     }
 
     void saveAddressInPref(String address) {

@@ -26,6 +26,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AccelerateInterpolator;
@@ -172,6 +173,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
      * the state is applied immediately.
      */
     public void animateToState(State newState, int duration) {
+//        if(State.SEARCH_BAR == newState){
+//            throw new RuntimeException("333333");
+//        }
         if (mState != newState) {
             mState = newState;
 

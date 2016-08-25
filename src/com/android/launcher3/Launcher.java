@@ -124,7 +124,7 @@ import com.android.launcher3.widget.WidgetHostViewLoader;
 import com.android.launcher3.widget.WidgetsContainerView;
 
 import com.mediatek.launcher3.ext.LauncherLog;
-
+import com.google.android.youtube.player.YouTubeBaseActivity;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;

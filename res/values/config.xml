@@ -10,7 +10,7 @@
     <bool name="allow_rotation">false</bool>
     <!-- M: add land screen config -->
     <bool name="config_land">false</bool>
-
+    <bool name="allow_lefty">true</bool>
     <!-- Max number of page indicators to show -->
     <integer name="config_maxNumberOfPageIndicatorsToShow">21</integer>
 
@@ -107,5 +107,5 @@
     <bool name="support_calendar_icon">true</bool><!--Add BUG_ID:DWYSBM-79 zhaopenglin 20160602  -->
     <bool name="is_support_hideapps">true</bool><!--add by zhaopenglin for hide app DWYQLSSB-77 20160617-->
     <bool name="gmms_unreadSupport">false</bool><!--Add BUG_ID:DWYQDSS-275 zhaopenglin 20160714-->
-
+    <integer name="google_play_services_version">8487000</integer>
 </resources>

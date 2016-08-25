@@ -308,4 +308,23 @@
     <string name="changebg">Change BG transparency</string>
     <string name="customiz_button_text">Customize</string>
     <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 end -->
+    <!--add lefty start-->
+    <string name="gcm_defaultSenderId">967880727475</string>
+    <string name="search">Search</string>
+    <string name="select_language_s">Select Language(s)</string>
+    <string name="choose_your_preferred_language_s">Choose your preferred language(s)</string>
+    <string name="next">NEXT</string>
+    <string name="select_publisher_s">Select Publisher(s)</string>
+    <string name="choose_your_preferred_publisher_s">Choose your preferred Publisher(s)</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="proceed">PROCEED</string>
+    <string name="please_wait_your_buddy_lefty_is_loading">Please wait your buddy lefty is loading</string>
+    <!--<string name="cancel">CANCEL</string>-->
+    <string name="done">DONE</string>
+    <string name="launcher_app_name">Launcher3</string>
+    <string name="loading">Loading</string>
+    <string name="fragment_tag">web</string>
+    <string name="force_crash">Force Crash!</string>
+    <string name="com.crashlytics.android.build_id">45897748574985748594758495874</string>
+    <!--add lefty end-->
 </resources>

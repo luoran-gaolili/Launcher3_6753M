@@ -58,4 +58,12 @@
     <color name="actionbar_click_color">#18AD85</color>
     <color name="actionbar_background_color">#303030</color>
     <!-- add by luoran for 20150310 end -->
+    <!--add lefty start-->
+    <color name="e2e2e2">#E2E2E2</color>
+    <color name="six_nine">#999999</color>
+    <color name="b_e">#BEBEBE</color>
+    <color name="e_d">#EDEDED</color>
+    <color name="six_three">#333333</color>
+    <color name="six_c">#CCCCCC</color>
+    <!--add lefty end-->
 </resources>

@@ -123,6 +123,7 @@ public final class Utilities {
     private static boolean sForceEnableRotation = isPropertyEnabled(FORCE_ENABLE_ROTATION_PROPERTY);
 
     public static final String ALLOW_ROTATION_PREFERENCE_KEY = "pref_allowRotation";
+    public static final String ALLOW_LEFTY_PREFERENCE_KEY = "pref_allowLefty";//add lefty
 
     public static boolean isPropertyEnabled(String propertyName) {
         return Log.isLoggable(propertyName, Log.VERBOSE);
@@ -139,7 +140,20 @@ public final class Utilities {
     public static boolean isRotationAllowedForDevice(Context context) {
         return sForceEnableRotation || context.getResources().getBoolean(R.bool.allow_rotation);
     }
+	//add lefty start
+    public static boolean isLeftyAllowedPrefEnabled(Context context, boolean multiProcess) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(
+                LauncherAppState.getSharedPreferencesKey(), Context.MODE_PRIVATE | (multiProcess ?
+                        Context.MODE_MULTI_PROCESS : 0));
+        boolean allowRotationPref = sharedPrefs.getBoolean(ALLOW_LEFTY_PREFERENCE_KEY, true);
+        return allowRotationPref;
+    }
 
+    public static boolean isLeftyAllowedForDevice(Context context) {
+        return context.getResources().getBoolean(R.bool.allow_lefty);
+    }
+
+//add lefty end
     public static Bitmap createIconBitmap(Cursor c, int iconIndex, Context context) {
         byte[] data = c.getBlob(iconIndex);
         try {

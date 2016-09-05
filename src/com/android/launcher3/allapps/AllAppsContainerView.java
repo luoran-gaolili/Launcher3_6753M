@@ -182,6 +182,7 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
         mLauncher = (Launcher) context;
         mSectionNamesMargin = res.getDimensionPixelSize(R.dimen.all_apps_grid_view_start_margin);
         mApps = new AlphabeticalAppsList(context);
+        mLauncher.setMupdatePredictedApp(mApps);//设置回调接口为mApps 这样保证了是同一个对象// A: zhaopenglin for predictionApp
         mAdapter = new AllAppsGridAdapter(mLauncher, mApps, this, mLauncher, this);
         mApps.setAdapter(mAdapter);
         mLayoutManager = mAdapter.getLayoutManager();

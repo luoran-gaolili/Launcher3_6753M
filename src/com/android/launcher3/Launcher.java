@@ -108,6 +108,7 @@ import android.widget.Toast;
 
 import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.PagedView.PageSwitchListener;
+import com.android.launcher3.allapps.AlphabeticalAppsList;
 import com.android.launcher3.compat.PackageInstallerCompat;
 import com.android.launcher3.allapps.AllAppsContainerView;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
@@ -475,6 +476,15 @@ public class Launcher extends Activity
     public static boolean DISABLE_APPLIST_WHITE_BG = true;
     public static final String PROP_DISABLE_APPLIST_WHITE_BG = "launcher.whitebg.disable";
     private Dialog customizDialog;//add by zhaopenglin for hide app DWYQLSSB-77 20160617
+    // A: zhaopenglin for predictionApp start
+
+    private updatePredictedApp mupdatePredictedApp;
+
+    public void setMupdatePredictedApp(updatePredictedApp mupdatePredictedApp) {
+        this.mupdatePredictedApp = mupdatePredictedApp;
+    }
+
+    // A: zhaopenglin for predictionApp end
     // should kill and restart launcher process to re-execute static block if reset properties
     // adb shell setprop launcher.applist.whitebg.disable true/false
     // adb shell stop
@@ -3351,6 +3361,13 @@ public class Launcher extends Activity
                 launcherApps.startActivityForProfile(intent.getComponent(), user,
                         intent.getSourceBounds(), optsBundle);
             }
+            Log.i("zhao11","启动应用");
+            // A: zhaopenglin for predictionApp start
+            if(mupdatePredictedApp != null){
+                Log.i("zhao11","launcher 更新了启动应用");
+                mupdatePredictedApp.updatePredictedApp(intent.getComponent(), user);
+            }
+            // A: zhaopenglin for predictionApp end
             return true;
         } catch (SecurityException e) {
             /// M: Runtime permission check @ {
@@ -3926,12 +3943,14 @@ public class Launcher extends Activity
      * resumed.
      */
     private void tryAndUpdatePredictedApps() {
-        if (mLauncherCallbacks != null) {
-            List<ComponentKey> apps = mLauncherCallbacks.getPredictedApps();
+        //if (mLauncherCallbacks != null) {
+            //List<ComponentKey> apps = mLauncherCallbacks.getPredictedApps();
+        Log.i("zhao11","tryAndUpdatePredictedApps");
+            List<ComponentKey> apps =  new ArrayList<>();
             if (apps != null) {
                 mAppsView.setPredictedApps(apps);
             }
-        }
+        //}
     }
 
     void lockAllApps() {
@@ -5510,6 +5529,11 @@ public class Launcher extends Activity
         }
         return false;
     }
+    // A: zhaopenglin for predictionApp start
+    public interface updatePredictedApp{
+        public void updatePredictedApp(ComponentName componentName,UserHandleCompat user);
+    }
+    // A: zhaopenglin for predictionApp end
 }
 
 interface DebugIntents {

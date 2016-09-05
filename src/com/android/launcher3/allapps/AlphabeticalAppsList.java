@@ -15,7 +15,9 @@
  */
 package com.android.launcher3.allapps;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import com.android.launcher3.AppInfo;
@@ -41,7 +43,7 @@ import java.util.TreeMap;
 /**
  * The alphabetically sorted list of applications.
  */
-public class AlphabeticalAppsList {
+public class AlphabeticalAppsList implements Launcher.updatePredictedApp{
 
     public static final String TAG = "AlphabeticalAppsList";
     private static final boolean DEBUG = false;
@@ -184,7 +186,7 @@ public class AlphabeticalAppsList {
     // The set of sections that we allow fast-scrolling to (includes non-merged sections)
     private List<FastScrollSectionInfo> mFastScrollerSections = new ArrayList<>();
     // The set of predicted app component names
-    private List<ComponentKey> mPredictedAppComponents = new ArrayList<>();
+    private final List<ComponentKey> mPredictedAppComponents = new ArrayList<>();
     // The set of predicted apps resolved from the component names and the current set of apps
     private List<AppInfo> mPredictedApps = new ArrayList<>();
     // The of ordered component names as a result of a search query
@@ -195,15 +197,75 @@ public class AlphabeticalAppsList {
     private AppNameComparator mAppNameComparator;
     private MergeAlgorithm mMergeAlgorithm;
     private int mNumAppsPerRow;
-    private int mNumPredictedAppsPerRow;
+    private int mNumPredictedAppsPerRow;//显示几个最近应用
     private int mNumAppRowsInAdapter;
-
+    // A: zhaopenglin for predictionApp start
+    private SharedPreferences predictedSP;
+    private SharedPreferences.Editor editor;
+    private boolean isFirstRun = true;
+    // A: zhaopenglin for predictionApp end
     public AlphabeticalAppsList(Context context) {
         mLauncher = (Launcher) context;
         mIndexer = new AlphabeticIndexCompat(context);
         mAppNameComparator = new AppNameComparator(context);
+        // A: zhaopenglin for predictionApp start
+        predictedSP = mLauncher.getSharedPreferences("predictedsp",Context.MODE_PRIVATE);
+        editor = predictedSP.edit();
+        // A: zhaopenglin for predictionApp end
+    }
+    // A: zhaopenglin for predictionApp start
+    @Override
+    public void updatePredictedApp(ComponentName componentName,UserHandleCompat user) {
+        ComponentKey mCK = new ComponentKey(componentName,user);
+        Log.i("zhao11","应用列表更新");
+        reorderComponentKey(mCK);
+        setPredictedSP();
     }
 
+    private void reorderComponentKey(ComponentKey componentKey){
+        if(mPredictedAppComponents != null) {
+            Log.i("zhao11","reorderComponentKey:"+mPredictedAppComponents.size());
+            if (mPredictedAppComponents.remove(componentKey)) {
+                mPredictedAppComponents.add(0, componentKey);
+            }
+        }
+    }
+
+    private void setPredictedSP(){
+        editor.clear();
+        if(mPredictedAppComponents.size() < mNumPredictedAppsPerRow) return;
+        for(int i = 0; i < mNumPredictedAppsPerRow; i++){
+            editor.putString(i + "", mPredictedAppComponents.get(i).flattenToString(mLauncher));
+            Log.i("zhao11", "setPredictedSP:" + mPredictedAppComponents.get(i).flattenToString(mLauncher));
+        }
+        editor.commit();
+    }
+
+    private void getPredictedSP(){
+        ComponentKey CPK;
+        for(int i = mNumPredictedAppsPerRow - 1; i > -1 ; i--){
+            Log.i("zhao11","getPredictedSP:"+predictedSP.getString(i+"",null)+",i:"+i);
+            CPK =  getCKfromflattenStr(predictedSP.getString(i+"",null));
+            if(CPK == null) Log.i("zhao11","CPK为空");
+            if(CPK != null) {
+                Log.i("zhao11","CPK不为空了");
+                isFirstRun = false;
+            }
+            reorderComponentKey(CPK);
+        }
+    }
+
+    private ComponentKey getCKfromflattenStr(String flattenToString){
+        Log.i("zhao11","getCKfromflattenStr:"+flattenToString);
+        ComponentKey CPK;
+        for(int i = 0 ; i < mPredictedAppComponents.size();i++){
+            CPK = mPredictedAppComponents.get(i);
+            if(CPK.flattenToString(mLauncher).equals(flattenToString))
+                return CPK;
+        }
+        return null;
+    }
+    // A: zhaopenglin for predictionApp end
     /**
      * Sets the number of apps per row.
      */
@@ -294,8 +356,8 @@ public class AlphabeticalAppsList {
      * of applications, we should merge the results only in onAppsUpdated() which is idempotent.
      */
     public void setPredictedApps(List<ComponentKey> apps) {
-        mPredictedAppComponents.clear();
-        mPredictedAppComponents.addAll(apps);
+        //mPredictedAppComponents.clear();
+        //mPredictedAppComponents.addAll(apps);
         onAppsUpdated();
     }
 
@@ -394,7 +456,6 @@ public class AlphabeticalAppsList {
                 getAndUpdateCachedSectionName(info.title);
             }
         }
-
         // Recompose the set of adapter items from the current set of apps
         updateAdapterItems();
     }
@@ -431,6 +492,14 @@ public class AlphabeticalAppsList {
 
         // Process the predicted app components
         mPredictedApps.clear();
+        // A: zhaopenglin for predictionApp start
+        if(mPredictedAppComponents.isEmpty()) mPredictedAppComponents.addAll(mComponentToAppMap.keySet());
+        if(isFirstRun){
+            Log.i("zhao11", "updateAdapterItems第一次运行");
+            getPredictedSP();
+        }
+        // A: zhaopenglin for predictionApp end
+        Log.i("zhao11", "updateAdapterItems:" + mPredictedAppComponents.size());
         if (mPredictedAppComponents != null && !mPredictedAppComponents.isEmpty() && !hasFilter()) {
             for (ComponentKey ck : mPredictedAppComponents) {
                 AppInfo info = mComponentToAppMap.get(ck);

@@ -1148,6 +1148,11 @@ public class Launcher extends Activity
         if (mOnResumeState == State.WORKSPACE) {
             showWorkspace(false);
         } else if (mOnResumeState == State.APPS) {
+            //add by luoran for hide workspace(start)
+            //if(getResources().getBoolean(R.bool.is_hide_workspace)){
+                mWorkspace.setVisibility(View.INVISIBLE);
+            //}
+            //add by luoran for hide workspace(end)
             boolean launchedFromApp = (mWaitingForResume != null);
             // Don't update the predicted apps if the user is returning to launcher in the apps
             // view after launching an app, as they may be depending on the UI to be static to

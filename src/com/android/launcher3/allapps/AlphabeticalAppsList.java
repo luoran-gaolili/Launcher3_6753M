@@ -186,7 +186,7 @@ public class AlphabeticalAppsList implements Launcher.updatePredictedApp{
     // The set of sections that we allow fast-scrolling to (includes non-merged sections)
     private List<FastScrollSectionInfo> mFastScrollerSections = new ArrayList<>();
     // The set of predicted app component names
-    private final List<ComponentKey> mPredictedAppComponents = new ArrayList<>();
+    private List<ComponentKey> mPredictedAppComponents = new ArrayList<>();
     // The set of predicted apps resolved from the component names and the current set of apps
     private List<AppInfo> mPredictedApps = new ArrayList<>();
     // The of ordered component names as a result of a search query
@@ -224,7 +224,7 @@ public class AlphabeticalAppsList implements Launcher.updatePredictedApp{
 
     private void reorderComponentKey(ComponentKey componentKey){
         if(mPredictedAppComponents != null) {
-            Log.i("zhao11","reorderComponentKey:"+mPredictedAppComponents.size());
+            Log.i("zhao11", "reorderComponentKey:" + mPredictedAppComponents.size());
             if (mPredictedAppComponents.remove(componentKey)) {
                 mPredictedAppComponents.add(0, componentKey);
             }
@@ -232,26 +232,30 @@ public class AlphabeticalAppsList implements Launcher.updatePredictedApp{
     }
 
     private void setPredictedSP(){
-        editor.clear();
-        if(mPredictedAppComponents.size() < mNumPredictedAppsPerRow) return;
-        for(int i = 0; i < mNumPredictedAppsPerRow; i++){
-            editor.putString(i + "", mPredictedAppComponents.get(i).flattenToString(mLauncher));
-            Log.i("zhao11", "setPredictedSP:" + mPredictedAppComponents.get(i).flattenToString(mLauncher));
+        if(editor != null) {
+            editor.clear();
+            if (mPredictedAppComponents.size() < mNumPredictedAppsPerRow) return;
+            for (int i = 0; i < mNumPredictedAppsPerRow; i++) {
+                editor.putString(i + "", mPredictedAppComponents.get(i).flattenToString(mLauncher));
+                Log.i("zhao11", "setPredictedSP:" + mPredictedAppComponents.get(i).flattenToString(mLauncher));
+            }
+            editor.commit();
         }
-        editor.commit();
     }
 
     private void getPredictedSP(){
         ComponentKey CPK;
-        for(int i = mNumPredictedAppsPerRow - 1; i > -1 ; i--){
-            Log.i("zhao11","getPredictedSP:"+predictedSP.getString(i+"",null)+",i:"+i);
-            CPK =  getCKfromflattenStr(predictedSP.getString(i+"",null));
-            if(CPK == null) Log.i("zhao11","CPK为空");
-            if(CPK != null) {
-                Log.i("zhao11","CPK不为空了");
-                isFirstRun = false;
+        if(predictedSP != null) {
+            for (int i = mNumPredictedAppsPerRow - 1; i > -1; i--) {
+                Log.i("zhao11", "getPredictedSP:" + predictedSP.getString(i + "", null) + ",i:" + i);
+                CPK = getCKfromflattenStr(predictedSP.getString(i + "", null));
+                if (CPK == null) Log.i("zhao11", "CPK为空");
+                if (CPK != null) {
+                    Log.i("zhao11", "CPK不为空了");
+                    isFirstRun = false;
+                }
+                reorderComponentKey(CPK);
             }
-            reorderComponentKey(CPK);
         }
     }
 
@@ -260,7 +264,7 @@ public class AlphabeticalAppsList implements Launcher.updatePredictedApp{
         ComponentKey CPK;
         for(int i = 0 ; i < mPredictedAppComponents.size();i++){
             CPK = mPredictedAppComponents.get(i);
-            if(CPK.flattenToString(mLauncher).equals(flattenToString))
+            if(CPK != null && CPK.flattenToString(mLauncher).equals(flattenToString))
                 return CPK;
         }
         return null;

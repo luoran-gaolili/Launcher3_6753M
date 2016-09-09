@@ -25,7 +25,7 @@ public class PlayYoutubeActivity extends YouTubeBaseActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.play_youtube);
+        setContentView(R.layout.lefty_play_youtube);
 
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         gettingExtras();

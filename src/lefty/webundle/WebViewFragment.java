@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.launcher3.R;
 import com.google.android.gms.analytics.HitBuilders;
@@ -76,13 +74,14 @@ public class WebViewFragment extends Fragment {
     public HTML5WebView getWebView() {
         return mWebView;
     }
-TextView status_bar_textview;
-    @Nullable
+
+    TextView status_bar_textview;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_webview_layout, null);
+        mMainView = inflater.inflate(R.layout.lefty_fragment_webview_layout, null);
         mLayout = (RelativeLayout) mMainView.findViewById(R.id.webview_container);
-        status_bar_textview = (TextView)mMainView.findViewById(R.id.status_bar_textview);
+        status_bar_textview = (TextView) mMainView.findViewById(R.id.status_bar_textview);
         status_bar_textview.setVisibility(View.GONE);
         mImageView = (ImageView) mMainView.findViewById(R.id.native_imageview);
 
@@ -163,10 +162,10 @@ TextView status_bar_textview;
     @JavascriptInterface
     public void loadWebView() {
 
-        try{
+        try {
             mTracker.setScreenName(CommonsUtils.WEB_SCREEN_NAME);
             mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -192,13 +191,13 @@ TextView status_bar_textview;
             } else {
                 finalURL = BASE_URL_WIFI + deviceId + "/" + address + "/" + lang;
             }
+            Log.e("Final webview url", "" + finalURL);
 
         } else {
             //Toast.makeText(getActivity(), "You are offline", Toast.LENGTH_LONG).show();
         }
         mFirstTimeLoad = true;
         mWebView.loadUrl(finalURL);
-
 
 
     }
@@ -236,7 +235,6 @@ TextView status_bar_textview;
 
     public void setUpWebView() {
         mWebView = new HTML5WebView(getActivity());
-        mWebView.getSettings().setUserAgentString("Mozilla/5.0 (Linux; U; Android 2.0; en-us; Droid Build/ESD20) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17");
         mWebView.setWebViewClient(new Callback());
         mLayout.addView(mWebView.getLayout());
 
@@ -281,7 +279,7 @@ TextView status_bar_textview;
                     deepLink = uri.getQueryParameter("deeplink");
                     if (!TextUtils.isEmpty(deepLink)) {
                         String language = uri.getQueryParameter("lang");
-                        if (!TextUtils.isEmpty(language)){
+                        if (!TextUtils.isEmpty(language)) {
                             saveLanguageInPref(language);
                             destroyWebView();
                             loadWebView();
@@ -294,19 +292,19 @@ TextView status_bar_textview;
                         return true;
                     }
                 }
-            }else if (url.contains("wallpaper")){
+            } else if (url.contains("wallpaper")) {
                 if (uri != null) {
                     actionParam = uri.getQueryParameter("action");
-                    if (!TextUtils.isEmpty(actionParam) && actionParam .equalsIgnoreCase("wallpaper")){
+                    if (!TextUtils.isEmpty(actionParam) && actionParam.equalsIgnoreCase("wallpaper")) {
                         String wallURL = uri.getQueryParameter("url");
-                        if (!TextUtils.isEmpty(wallURL)){
+                        if (!TextUtils.isEmpty(wallURL)) {
                             launchWallpaperActivity(url);
                             return true;
                         }
 
                     }
                 }
-            }else {
+            } else {
                 openBrowser(url);
             }
             /*else if (actionParam != null) {
@@ -523,8 +521,13 @@ TextView status_bar_textview;
 
 
     void openBrowser(String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     void openTOI(String deepLinkURL) {
@@ -540,10 +543,10 @@ TextView status_bar_textview;
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivity(intent);
             } else {
-                Toast.makeText(getActivity(), "No app found", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "No app found", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getActivity(), "Unable to parse link", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Unable to parse link", Toast.LENGTH_SHORT).show();
         }
 
 

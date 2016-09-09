@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 LOCAL_PATH := $(call my-dir)
 
 #
@@ -21,11 +20,39 @@ LOCAL_PATH := $(call my-dir)
 #
 include $(CLEAR_VARS)
 
+#Add zhaopenglin for use ori launcher 20160413(start)
+ifeq ($(strip $(RGK_K_Wallpaper_SUPPORT)), no)
+LOCAL_MANIFEST_FILE := ori/AndroidManifest.xml
+endif
+#Add zhaopenglin for use ori launcher 20160413(end)
+
 LOCAL_MODULE_TAGS := optional
 
+LOCAL_STATIC_JAVA_AAR_LIBRARIES := \
+    play-services-base \
+    play-services-basement \
+    play-services-analytics \
+    play-services-gcm \
+    play-services-location \
+    answers \
+    beta \
+    crashlytics \
+    crashlytics-core \
+    fabric \
+    tweet-ui \
+    twitter \
+    twitter-core \
+    tweet-composer \
+    twitter-unity \
+    digits
+    
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v4 \
     android-support-v7-recyclerview \
+    YouTubeAndroidPlayerApi \
+    gson \
+    universal-image-loader \
+    retrofit \
     com.mediatek.launcher3.ext
 
 LOCAL_JAVA_LIBRARIES := mediatek-framework \
@@ -85,13 +112,162 @@ LOCAL_AAPT_FLAGS := \
     --extra-packages android.support.v7.recyclerview
 
 #LOCAL_SDK_VERSION := current
-LOCAL_PACKAGE_NAME := Launcher3
+LOCAL_PACKAGE_NAME := Launcher3WithLefty
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_CERTIFICATE := shared
 
-LOCAL_OVERRIDES_PACKAGES := Home Launcher2
+LOCAL_OVERRIDES_PACKAGES := Home Launcher2 Launcher3
 
 include $(BUILD_PACKAGE)
+
+include $(CLEAR_VARS)
+
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+    YouTubeAndroidPlayerApi:libs/YouTubeAndroidPlayerApi.jar \
+    gson:libs/gson-2.2.4.jar \
+    universal-image-loader:libs/universal-image-loader-1.9.5.jar \
+    retrofit:libs/retrofit-1.9.0.jar
+    
+include $(BUILD_MULTI_PREBUILT)
+
+######################## Play Service ##############################
+include $(CLEAR_VARS)
+LOCAL_MODULE := play-services-base
+LOCAL_SRC_FILES := libs/play-services-base-8.4.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := play-services-basement
+LOCAL_SRC_FILES := libs/play-services-basement-8.4.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := play-services-analytics
+LOCAL_SRC_FILES := libs/play-services-analytics-8.4.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := play-services-gcm
+LOCAL_SRC_FILES := libs/play-services-gcm-8.4.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := play-services-location
+LOCAL_SRC_FILES := libs/play-services-location-8.4.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+######################## Play Service ##############################
+
+######################## Twitter ##############################
+include $(CLEAR_VARS)
+LOCAL_MODULE := twitter
+LOCAL_SRC_FILES := libs/twitter-1.13.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := twitter-core
+LOCAL_SRC_FILES := libs/twitter-core-1.6.5.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := tweet-composer
+LOCAL_SRC_FILES := libs/tweet-composer-1.0.3.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := tweet-ui
+LOCAL_SRC_FILES := libs/twitterui.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := twitter-unity
+LOCAL_SRC_FILES := libs/twitter-unity-0.1.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+######################## Twitter ##############################
+
+######################## Crashlytics ##############################
+include $(CLEAR_VARS)
+LOCAL_MODULE := answers
+LOCAL_SRC_FILES := libs/answers-1.3.6.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := beta
+LOCAL_SRC_FILES := libs/beta-1.1.4.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := crashlytics
+LOCAL_SRC_FILES := libs/crashlytics-2.5.5.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := crashlytics-core
+LOCAL_SRC_FILES := libs/crashlytics-core-2.3.8.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+######################## Crashlytics ##############################
+
+######################## Fabric ##############################
+include $(CLEAR_VARS)
+LOCAL_MODULE := fabric
+LOCAL_SRC_FILES := libs/fabric-1.3.10.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+######################## Fabric ##############################
+
+######################## Digits ##############################
+include $(CLEAR_VARS)
+LOCAL_MODULE := digits
+LOCAL_SRC_FILES := libs/digits-1.10.0.aar
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
+LOCAL_BUILT_MODULE_STEM := javalib.jar
+include $(BUILD_PREBUILT)
+######################## Digits ##############################
 
 
 #

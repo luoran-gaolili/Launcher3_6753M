@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:text="header"
+        android:text="@string/str_header"
         android:paddingTop="10dp"
         android:textAllCaps="true"
         android:textColor="@android:color/black"
@@ -34,7 +34,7 @@
             android:layout_marginLeft="0dp"
             android:buttonTint="#009688"
             android:paddingLeft="0dp"
-            android:text="sdf"
+            android:text="@string/str_sdf"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 

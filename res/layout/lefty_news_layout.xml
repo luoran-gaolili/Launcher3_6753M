@@ -33,7 +33,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:maxLines="2"
-            android:text=""
+            android:text="@string/str_null"
             android:textColor="#2a2a2a" />
 
         <TextView
@@ -46,7 +46,7 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:visibility="visible"
-            android:text=""
+            android:text="@string/str_null"
             android:minHeight="40dp"
             android:textSize="13sp" />
 
@@ -57,7 +57,7 @@
             android:layout_marginTop="2dp"
             android:visibility="visible"
             android:textColor="#bababa"
-            android:text=""
+            android:text="@string/str_null"
             android:textSize="12sp" />
 
     </LinearLayout>

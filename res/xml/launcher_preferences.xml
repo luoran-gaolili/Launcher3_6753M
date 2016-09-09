@@ -16,11 +16,17 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <!--<SwitchPreference
             android:key="pref_allowRotation"
             android:title="@string/allow_rotation_title"
             android:defaultValue="@bool/allow_rotation"
             android:persistent="true"
-    />
+    />-->
+
+    <SwitchPreference
+        android:defaultValue="@bool/allow_rotation"
+        android:key="pref_allowLefty"
+        android:persistent="true"
+        android:title="Enable lefty" />
 
 </PreferenceScreen>

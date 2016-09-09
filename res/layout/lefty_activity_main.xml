@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mScrollveiw"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widgets_view_section_text_color">
@@ -25,8 +26,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/lefty_search_yahoo"
                 android:gravity="center"
-                android:padding="2dp"
-                >
+                android:padding="2dp">
 
                 <EditText
                     android:id="@+id/search_yahoo_edt"
@@ -38,9 +38,12 @@
                     android:imeOptions="actionSearch"
                     android:inputType="textPersonName"
                     android:maxLines="1"
+                    android:clickable="true"
+                    android:focusableInTouchMode="true"
                     android:minHeight="30dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="50dp"
+                    android:textColor="#000000"
                     android:textColorHighlight="@color/six_nine"
                     android:textColorHint="@color/b_e"
                     android:textSize="18sp" />
@@ -51,7 +54,7 @@
                     android:layout_height="33dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/search" />
+                    android:background="@drawable/lefty_search_icon" />
             </RelativeLayout>
 
 
@@ -131,12 +134,11 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="19.5dp"
-                    android:background="@drawable/setting" />
+                    android:background="@drawable/lefty_setting_icon" />
             </RelativeLayout>
 
 
         </RelativeLayout>
-
 
 
         <LinearLayout
@@ -168,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
-                    android:text="@string/select_language_s"
+                    android:text="@string/str_select_language"
                     android:textColor="@color/six_three"
                     android:textSize="18sp" />
 
@@ -235,7 +237,7 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp"
                         android:paddingTop="8dp"
-                        android:text="@string/next"
+                        android:text="@string/str_next"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
                 </RelativeLayout>
@@ -334,7 +336,7 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp"
                         android:paddingTop="8dp"
-                        android:text="@string/previous"
+                        android:text="@string/str_previous"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -352,7 +354,7 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp"
                         android:paddingTop="8dp"
-                        android:text="@string/proceed"
+                        android:text="@string/str_proceed"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
                 </RelativeLayout>
@@ -384,8 +386,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                 />
+                android:focusableInTouchMode="true" />
 
             <lefty.com.viewpagerindicator.CirclePageIndicator
                 android:id="@+id/banner2_indicator"
@@ -396,7 +397,7 @@
         </FrameLayout>
 
 
-        <include
+        <!--<include
             android:id="@+id/twitter_header"
             layout="@layout/lefty_category_header" />
 
@@ -406,7 +407,18 @@
             android:layout_height="wrap_content"
             android:background="@color/e_d"
             android:orientation="vertical"
-            android:paddingBottom="8dp">
+            android:paddingBottom="0dp">-->
+        <include
+            android:id="@+id/twitter_header"
+            layout="@layout/lefty_category_header" />
+
+        <LinearLayout
+            android:id="@+id/twiterlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ededed"
+            android:orientation="vertical"
+            android:paddingBottom="0dp">
 
 
         </LinearLayout>
@@ -493,7 +505,7 @@
             android:orientation="horizontal"
             android:padding="1dp"></LinearLayout>
 
-        <include
+       <!-- <include
             android:id="@+id/twitter_trending_news"
             layout="@layout/lefty_category_header" />
 
@@ -502,6 +514,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/e_d"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">-->
+        <include
+            android:id="@+id/twitter_trending_news"
+            layout="@layout/lefty_category_header" />
+
+        <LinearLayout
+            android:id="@+id/twiter_trending_news_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ededed"
             android:orientation="vertical"
             android:paddingBottom="1dp">
 
@@ -518,8 +541,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                 />
+                android:focusableInTouchMode="true" />
 
             <lefty.com.viewpagerindicator.CirclePageIndicator
                 android:id="@+id/banner1_indicator"

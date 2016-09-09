@@ -78,4 +78,19 @@
         android:onClick="onClickCustomizButton"
         android:textSize="12sp" />
     <!--add by zhaopenglin for hide app JWBLB-1140 20150810 end -->
+    
+    <TextView
+        android:id="@+id/l_settings_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/lefty_settings_button"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal"
+        android:text="@string/lefty_settings"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="12dp" />
+
 </LinearLayout>

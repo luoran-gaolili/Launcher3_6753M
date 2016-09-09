@@ -20,7 +20,7 @@
         android:layout_width="59dp"
         android:layout_height="41.5dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/play_icon" />
+        android:background="@drawable/lefty_play_icon" />
 
 
 </RelativeLayout>

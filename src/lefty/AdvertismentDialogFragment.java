@@ -7,25 +7,23 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.launcher3.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
- * Created by sandeep on 6/7/16.
+ * Created by jaggi on 6/7/16.
  */
 public class AdvertismentDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -34,7 +32,6 @@ public class AdvertismentDialogFragment extends DialogFragment implements View.O
     ImageView mAdv_Image;
 
     ProgressBar mProgressBar;
-
     String banner_image;
     String redirect_link;
 
@@ -63,18 +60,14 @@ public class AdvertismentDialogFragment extends DialogFragment implements View.O
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Window window = getDialog().getWindow();
-        WindowManager.LayoutParams attributes = window.getAttributes();
-        //must setBackgroundDrawable(TRANSPARENT) in onActivityCreated()
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         View view = inflater.inflate(R.layout.lefty_advertisment_dialog, container, false);
 
         return view;
@@ -82,7 +75,7 @@ public class AdvertismentDialogFragment extends DialogFragment implements View.O
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view,  Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mCross = (ImageView) view.findViewById(R.id.cross);
@@ -137,7 +130,12 @@ public class AdvertismentDialogFragment extends DialogFragment implements View.O
         switch (v.getId()) {
 
             case R.id.adv_image:
-                openBrowser(redirect_link);
+                if (CommonsUtils.isConnectedToInternet(getActivity())) {
+                    openBrowser(redirect_link);
+                    hitGA(redirect_link, "Popup");
+                } else {
+                    Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.cross:
@@ -152,8 +150,16 @@ public class AdvertismentDialogFragment extends DialogFragment implements View.O
 
     }
 
+    void hitGA(String actionName, String category) {
+        LeftyActivity.sendEvent(actionName, category, CommonsUtils.NATIVE_SCREEN_NAME);
+    }
+
     void openBrowser(String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

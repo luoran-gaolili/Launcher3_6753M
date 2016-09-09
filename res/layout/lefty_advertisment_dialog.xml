@@ -7,6 +7,12 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="#A5A5A5"
+        android:layout_margin="20dp" />
 
     <ImageView
         android:id="@+id/adv_image"
@@ -18,16 +24,16 @@
     <ImageView
         android:id="@+id/cross"
         android:layout_width="45dp"
-        android:layout_alignParentRight="true"
         android:layout_height="45dp"
+        android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/cross_r" />
+        android:src="@drawable/lefty_cross_button" />
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

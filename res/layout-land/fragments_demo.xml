@@ -25,7 +25,7 @@
       android:layout_weight="1"
       android:textAppearance="@android:style/TextAppearance.Small"
       android:gravity="center"
-      android:text="Here you are"/>
+      android:text="@string/str_here_you_are"/>
 
   <!--<FrameLayout-->
       <!--android:id="@+id/you_container"-->

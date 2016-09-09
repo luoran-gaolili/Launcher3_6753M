@@ -32,7 +32,7 @@
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="CANCEL"
+            android:text="@string/str_cancel"
             android:textStyle="bold"
             android:textColor="#009285" />
 
@@ -43,7 +43,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textStyle="bold"
-            android:text="DONE"
+            android:text="@string/str_done"
             android:textColor="#009285" />
     </LinearLayout>
 

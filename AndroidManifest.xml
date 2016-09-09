@@ -74,6 +74,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" /> 
     <!-- M: ALSP02241595, add MANAGE_USERS permission. -->
     <uses-permission android:name="android.permission.MANAGE_USERS" /> 
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 	<uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
     
     <!--add lefty start-->
@@ -87,6 +88,7 @@
     <!-- This app has permission to register and receive dataE message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <permission
         android:name="com.android.launcher3.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -96,8 +98,8 @@
         android:allowBackup="@bool/enable_backup"
         android:backupAgent="com.android.launcher3.LauncherBackupAgentHelper"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher_home"
-        android:label="@string/launcher_app_name"
+        android:icon="@mipmap/intex_icon"
+        android:label="@string/application_name"
         android:largeHeap="@bool/config_largeHeap"
         android:restoreAnyVersion="true"
         android:supportsRtl="true" >
@@ -348,6 +350,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-	    <!--add lefty end-->
+
+        <activity
+            android:name="lefty.settings.LeftySettingsActivity"
+            android:autoRemoveFromRecents="true"
+            android:screenOrientation="portrait"
+            android:label="@string/settings_button_text" />
     </application>
 </manifest>

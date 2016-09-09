@@ -37,7 +37,7 @@
                 android:id="@+id/img"
                 android:layout_width="44.50dp"
                 android:layout_height="82.5dp"
-                android:background="@drawable/logo_loder" />\
+                android:background="@drawable/lefty_logo_loder" />\
 
             <TextView
                 android:id="@+id/loader_textview"
@@ -58,9 +58,9 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginTop="2dp"
                 android:padding="10dp"
-                app:activeDot="@drawable/red_dot"
+                app:activeDot="@drawable/lefty_red_dot"
                 app:dotSize="8dp"
-                app:inactiveDot="@drawable/grey_dot"
+                app:inactiveDot="@drawable/lefty_grey_dot"
                 app:jumpingSpeed="300"
                 app:spacing="15dp" />
 

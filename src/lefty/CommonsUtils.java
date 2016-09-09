@@ -76,7 +76,12 @@ public class CommonsUtils {
     //lang=english-hindi-sonon
     //public static final String YAHOO_SEARCH_URL = "https://in.search.yahoo.com/yhs/mobile/search?hspart=testing&hsimp=yhsm-testing_001&p=";
 
-    //public static final String DEVELOPER_KEY = "AIzaSyC5L2osgrIiH6zc51QCNiciiBwnjS40iLw";
+    /* //public static final String DEVELOPER_KEY = "AIzaSyC5L2osgrIiH6zc51QCNiciiBwnjS40iLw";
+     public static final String DEVELOPER_KEY = "AIzaSyAHvgkLZ1txoSv-vwQvYxeip5wGgbU_m50";
+     //public static final String GCM_SENDER_KEY = "967880727475";
+     public static final String GCM_SENDER_KEY = "576407032788";
+     //public static final String TRACKING_ID = "UA-77683556-1";
+     public static final String TRACKING_ID = "UA-79995923-1";*/
     public static final String DEVELOPER_KEY = "AIzaSyAHvgkLZ1txoSv-vwQvYxeip5wGgbU_m50";
     //public static final String GCM_SENDER_KEY = "967880727475";
     public static final String GCM_SENDER_KEY = "576407032788";
@@ -96,27 +101,23 @@ public class CommonsUtils {
     public static final String YAHOO_EVENT_NAME = "YahooSearch";
 
 
-//    public static final String SHARED_PREF_NAME = "Lefty";
-//    public static final String SHARED_PREF_TOKEN_KEY = "token";
-//    public static final String SHARED_PREF_VERSION_KEY = "version";
-//    public static final String SHARED_PREF_ADDRESS_KEY = "address";
-//    public static final String SHARED_PREF_LANGUAGE_KEY = "version";
-//    public static final String SHARED_PREF_API_RESPONSE_KEY = "response";
-//    public static final String SHARED_PREF_APP_TYPE_KEY = "app_type";
-public static final String SHARED_PREF_NAME = "Lefty";
+    public static final String SHARED_PREF_NAME = "Lefty";
     public static final String SHARED_PREF_TOKEN_KEY = "token";
+    public static final String SHARED_PREF_NEWSPOINT_KEY = "newspoint";
     public static final String SHARED_PREF_VERSION_KEY = "version";
     public static final String SHARED_PREF_ADDRESS_KEY = "address";
     public static final String SHARED_PREF_LANGUAGE_KEY = "version";
+    public static final String SHARED_PREF_ALLOW_LEFTY_KEY = "allow_lefty";
     public static final String SHARED_PREF_API_RESPONSE_KEY = "response";
     public static final String SHARED_PREF_APP_TYPE_KEY = "app_type";
     public static final String SHARED_PREF_NO_OF_SWIPE = "swipe_num";
     public static final String SHARED_PREF_ADV_BANNER_ID = "adv_banner_id";
     public static final String SHARED_PREF_ADV_FREQUENCY = "adv_frequency";
-    public static final String SHARED_PREF_ADV_IMAGE="adv_image";
-    public static final String SHARED_PREF_ADV_REDIRECT_URL="adv_redirection_url";
-    public static final String SHARED_PREF_ADV_URL="adv_url";
-    public static final String SHARED_PREF_ADV_SHOW_TIME="adv_show_time";
+    public static final String SHARED_PREF_ADV_IMAGE = "adv_image";
+    public static final String SHARED_PREF_ADV_REDIRECT_URL = "adv_redirection_url";
+    public static final String SHARED_PREF_ADV_URL = "adv_url";
+    public static final String SHARED_PREF_ADV_SHOW_TIME = "adv_show_time";
+
 
     public static String getLocationAddress(Context context, double latitude, double longitude) {
 
@@ -270,6 +271,10 @@ public static final String SHARED_PREF_NAME = "Lefty";
         return null;
     }
 
+    void testGit() {
+        return;
+    }
+
     /**
      * required in order to prevent issues in earlier Android version.
      */
@@ -375,17 +380,22 @@ public static final String SHARED_PREF_NAME = "Lefty";
     }
 
     public static boolean checkPlayServices(Activity mContext) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(mContext);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
+        try {
+            GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+            int resultCode = apiAvailability.isGooglePlayServicesAvailable(mContext);
+            if (resultCode != ConnectionResult.SUCCESS) {
+                if (apiAvailability.isUserResolvableError(resultCode)) {
 //                apiAvailability.getErrorDialog(mContext, resultCode, 100)
 //                        .show();
-            } else {
+                } else {
+                }
+                return false;
             }
-            return false;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public static void hideKeyboard(Activity context) {

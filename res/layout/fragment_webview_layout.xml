@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/force_crash"
+        android:text="@string/str_force_crash"
         android:visibility="gone" />
 
 
@@ -33,6 +33,8 @@
         android:layout_alignParentBottom="true"
         android:background="#ffffff"
         android:gravity="center"
+        android:hint=""
+        android:text="@string/str_null"
         android:textSize="20sp"
         android:visibility="gone" />
 

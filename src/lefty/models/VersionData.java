@@ -56,6 +56,24 @@ public class VersionData {
         @SerializedName("youtube_key")
         @Expose
         private String youtube_key;
+        @SerializedName("newspoint")
+        @Expose
+        private String newspoint;
+
+        /**
+         * @return The newspoint
+         */
+        public String getNewspoint() {
+            return newspoint;
+        }
+
+        /**
+         * @param newspoint The newspoint
+         */
+        public void setNewspoint(String newspoint) {
+            this.newspoint = newspoint;
+        }
+
 
         /**
          * @return The uiVersion

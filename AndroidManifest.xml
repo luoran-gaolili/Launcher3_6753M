@@ -133,7 +133,15 @@
         <activity android:name="com.android.launcher3.hideapp.RGKHideAppsActivity" ></activity>
         <activity android:name="com.android.launcher3.hideapp.RGKDispalyHidedActivity" ></activity>
         <!--add by zhaopenglin for hide app DWYQLSSB-77 20160617 end -->
-
+        <activity
+            android:name=".t9.MainActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/t9_app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!-- M: hide apps activity used to configure apps to be hidden in apps list. -->
         <activity android:name="com.android.launcher3.HideAppsActivity"
             android:label="@string/hideapps"

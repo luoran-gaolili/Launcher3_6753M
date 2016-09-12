@@ -117,6 +117,9 @@ import com.android.launcher3.compat.UserHandleCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.config.ProviderConfig;
 import com.android.launcher3.model.WidgetsModel;
+import com.android.launcher3.t9.MainActivity;
+import com.android.launcher3.t9.blurImage.BlurBehind;
+import com.android.launcher3.t9.blurImage.OnBlurCompleteListener;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.Thunk;
@@ -3193,6 +3196,13 @@ public class Launcher extends Activity
         } else {
             startActivity(new Intent(this, SettingsActivity.class));
         }
+//        BlurBehind.getInstance().execute(this, new OnBlurCompleteListener() {
+//            @Override
+//            public void onBlurComplete() {
+//                Intent intent = new Intent(Launcher.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     public View.OnTouchListener getHapticFeedbackTouchListener() {

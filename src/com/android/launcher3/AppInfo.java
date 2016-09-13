@@ -86,7 +86,6 @@ public class AppInfo extends ItemInfo {
         SearchByNull,SearchByLabel,
     }
 
-    private String mSortKey; // as the sort key word
     private PinyinSearchUnit mLabelPinyinSearchUnit;// save the mLabel converted to Pinyin characters.
     private SearchByType mSearchByType; // Used to save the type of search
     private StringBuffer mMatchKeywords;// Used to save the type of Match Keywords.(label)
@@ -198,27 +197,6 @@ public class AppInfo extends ItemInfo {
             .putExtra(EXTRA_PROFILE, serialNumber);
     }
 
-
-
-    private static Comparator<Object> mChineseComparator = Collator.getInstance(Locale.CHINA);
-
-    public static Comparator<AppInfo> mDesComparator = new Comparator<AppInfo>() {
-
-        @Override
-        public int compare(AppInfo lhs, AppInfo rhs) {
-
-            return mChineseComparator.compare(rhs.mSortKey, lhs.mSortKey);
-        }
-    };
-
-    public static Comparator<AppInfo> mAscComparator = new Comparator<AppInfo>() {
-
-        @Override
-        public int compare(AppInfo lhs, AppInfo rhs) {
-            return mChineseComparator.compare(lhs.mSortKey, rhs.mSortKey);
-        }
-    };
-
     public static Comparator<AppInfo> mSearchComparator = new Comparator<AppInfo>() {
 
         @Override
@@ -237,15 +215,6 @@ public class AppInfo extends ItemInfo {
 
     public void setLabelPinyinSearchUnit(PinyinSearchUnit labelPinyinSearchUnit) {
         mLabelPinyinSearchUnit = labelPinyinSearchUnit;
-        Log.i("zhao11t9","执行了:");
-    }
-
-    public String getSortKey() {
-        return mSortKey;
-    }
-
-    public void setSortKey(String sortKey) {
-        mSortKey = sortKey;
     }
 
     public SearchByType getSearchByType() {
@@ -273,16 +242,8 @@ public class AppInfo extends ItemInfo {
         mMatchKeywords.delete(0, mMatchKeywords.length());
     }
 
-    public int getMatchStartIndex() {
-        return mMatchStartIndex;
-    }
-
     public void setMatchStartIndex(int matchStartIndex) {
         mMatchStartIndex = matchStartIndex;
-    }
-
-    public int getMatchLength() {
-        return mMatchLength;
     }
 
     public void setMatchLength(int matchLength) {

@@ -1,14 +1,9 @@
 package com.android.launcher3.t9;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.launcher3.AppInfo;
 import com.pinyinsearch.model.PinyinSearchUnit;
 import com.pinyinsearch.util.PinyinUtil;
 import com.pinyinsearch.util.T9Util;
@@ -21,26 +16,16 @@ import java.util.List;
 
 public class AppInfoHelper {
 	private static final String TAG="zhao11t9";
-	private static Character THE_LAST_ALPHABET='z';
-	private Context mContext;
 	private static AppInfoHelper mInstance;
 
-	private List<AppInfo> mBaseAllAppInfos;
+	private List<AppInfo> mBaseAllAppInfos; //所有应用
 
     //搜索结果列表
 	private List<AppInfo> mT9SearchAppInfos;
 
     //这个变量是记录第一次搜索为空的数字串而且以后保持不变只到删除key串
 	private StringBuffer mFirstNoT9SearchResultInput=null;
-	
-	private AsyncTask<Object, Object, List<AppInfo>> mLoadAppInfoTask=null;
-	private boolean mAppInfoChanged=true;
 
-	public interface OnAppInfoLoad{
-		void onAppInfoLoadSuccess();
-		void onAppInfoLoadFailed();
-	}
-	
 	public static AppInfoHelper getInstance(){
 		if(null==mInstance){
 			mInstance=new AppInfoHelper();
@@ -51,157 +36,28 @@ public class AppInfoHelper {
 	
 	private AppInfoHelper(){
 		initAppInfoHelper();
-		
 		return;
 	}
 	
 	private void initAppInfoHelper(){
-		mContext=MainActivity.getContext();
-		
 		clearAppInfoData();
-		
 		return;
 	}
 
 
 	public void setBaseAllAppInfos(List<AppInfo> baseAllAppInfos) {
 		mBaseAllAppInfos = baseAllAppInfos;
+        for(int i = 0 ; i< mBaseAllAppInfos.size();i++){
+            AppInfo appInfo = mBaseAllAppInfos.get(i);
+            //一定要添加下边这两句
+            //这两句是将应用名字和拼音搜索的jar包联系起来的
+            appInfo.getLabelPinyinSearchUnit().setBaseData(appInfo.getTitle());
+            PinyinUtil.parse(appInfo.getLabelPinyinSearchUnit());
+        }
 	}
 
 	public List<AppInfo> getT9SearchAppInfos() {
 		return mT9SearchAppInfos;
-	}
-
-	public boolean isAppInfoChanged() {
-		return mAppInfoChanged;
-	}
-
-	public void setAppInfoChanged(boolean appInfoChanged) {
-		mAppInfoChanged = appInfoChanged;
-	}
-	
-	public boolean startLoadAppInfo(){
-		if(true==isLoading()){
-			return false;
-		}
-		
-		if(false==isAppInfoChanged()){
-			return false;
-		}
-		
-		clearAppInfoData();
-		mLoadAppInfoTask=new AsyncTask<Object, Object, List<AppInfo>>(){
-
-			@Override
-			protected List<AppInfo> doInBackground(Object... params) {
-				// TODO Auto-generated method stub
-				return loadAppInfo(mContext);
-			}
-
-			@Override
-			protected void onPostExecute(List<AppInfo> result) {
-				parseAppInfo(result);
-				super.onPostExecute(result);
-				//setAppInfoChanged(false);
-				mLoadAppInfoTask=null;
-			}
-			
-		}.execute();
-		setAppInfoChanged(false);
-		return true;
-		
-	}
-	
-	@SuppressLint("DefaultLocale")
-	public List<AppInfo> loadAppInfo(Context context){
-		List<AppInfo> appInfos=new ArrayList<AppInfo>();
-		List<AppInfo> kanjiStartAppInfos = new ArrayList<AppInfo>();
-		List<AppInfo> nonKanjiStartAppInfos = new ArrayList<AppInfo>();
-		do{
-			if(null==context){
-				break;
-			}
-			
-			PackageManager pm=context.getPackageManager();
-			
-			long startLoadTime= System.currentTimeMillis();
-			int flags = PackageManager.GET_UNINSTALLED_PACKAGES;
-		
-		
-			List<PackageInfo> packageInfos=pm.getInstalledPackages(flags);
-			Log.i(TAG, packageInfos.size()+"");
-			for(PackageInfo pi:packageInfos){
-				boolean canLaunchTheMainActivity=AppUtil.appCanLaunchTheMainActivity(mContext, pi.packageName);
-				if(true==canLaunchTheMainActivity){
-					AppInfo appInfo=getAppInfo(pm, pi);
-					if(TextUtils.isEmpty(appInfo.getLabel())){
-						continue;
-					}
-					
-					appInfo.getLabelPinyinSearchUnit().setBaseData(appInfo.getLabel());
-					PinyinUtil.parse(appInfo.getLabelPinyinSearchUnit());
-					String sortKey= PinyinUtil.getSortKey(appInfo.getLabelPinyinSearchUnit()).toUpperCase();
-					appInfo.setSortKey(praseSortKey(sortKey));
-					boolean isKanji= PinyinUtil.isKanji(appInfo.getLabel().charAt(0));
-					if(true==isKanji){
-						kanjiStartAppInfos.add(appInfo);
-					}else{
-						nonKanjiStartAppInfos.add(appInfo);
-					}
-
-				}
-			}
-			long endLoadTime= System.currentTimeMillis();
-			Log.i(TAG, "endLoadTime-startLoadTime["+(endLoadTime-startLoadTime)+"]");
-			//Toast.makeText(mContext, "endLoadTime-startLoadTime["+(endLoadTime-startLoadTime)+"]", Toast.LENGTH_LONG).show();
-			break;
-		}while(false);
-		
-		long sortStartTime= System.currentTimeMillis();
-		
-		Collections.sort(kanjiStartAppInfos, AppInfo.mAscComparator);
-		Collections.sort(nonKanjiStartAppInfos, AppInfo.mAscComparator);
-		
-		//appInfos.addAll(nonKanjiStartAppInfos);
-		appInfos.addAll(kanjiStartAppInfos);
-	
-		/*Start: merge nonKanjiStartAppInfos and kanjiStartAppInfos*/
-		int lastIndex=0;
-		boolean shouldBeAdd=false;
-		for(int i=0; i<nonKanjiStartAppInfos.size(); i++){
-			String nonKanfirstLetter= PinyinUtil.getFirstLetter(nonKanjiStartAppInfos.get(i).getLabelPinyinSearchUnit());
-			//Log.i(TAG, "nonKanfirstLetter=["+nonKanfirstLetter+"]["+nonKanjiStartAppInfos.get(i).getLabel()+"]["+Integer.valueOf(nonKanjiStartAppInfos.get(i).getLabel().charAt(0))+"]");
-			int j=0;
-			for(j=0+lastIndex; j<appInfos.size(); j++){
-				String firstLetter= PinyinUtil.getFirstLetter(appInfos.get(j).getLabelPinyinSearchUnit());
-				lastIndex++;
-				if(nonKanfirstLetter.charAt(0)<firstLetter.charAt(0)||nonKanfirstLetter.charAt(0)>THE_LAST_ALPHABET){
-					shouldBeAdd=true;
-					break;
-				}else{
-					shouldBeAdd=false;
-				}
-			}
-			
-			if(lastIndex>=appInfos.size()){
-				lastIndex++;
-				shouldBeAdd=true;
-				//Log.i(TAG, "lastIndex="+lastIndex);
-			}
-			
-			if(true==shouldBeAdd){
-				appInfos.add(j, nonKanjiStartAppInfos.get(i));
-				shouldBeAdd=false;
-			}
-		}
-		/*End: merge nonKanjiStartAppInfos and kanjiStartAppInfos*/
-
-		long sortEndTime= System.currentTimeMillis();
-		Log.i(TAG, "sortEndTime-sortStartTime["+(sortEndTime-sortStartTime)+"]");
-	
-		Log.i(TAG, "appInfos.size()"+ appInfos.size());
-		//Toast.makeText(context,"["+ appInfos.get(0).getLabel()+"]["+appInfos.get(0).getPackageName()+"]", Toast.LENGTH_LONG).show();
-		return appInfos;
 	}
 
 	public void t9Search(String keyword){
@@ -263,14 +119,14 @@ public class AppInfoHelper {
 		int baseAppInfosCount=baseAppInfos.size();
 		for(int i=0; i<baseAppInfosCount; i++){
 			PinyinSearchUnit labelPinyinSearchUnit=baseAppInfos.get(i).getLabelPinyinSearchUnit();
-//		    Log.i(TAG,"labelPinyinSearchUnit:"+labelPinyinSearchUnit.getPinyinUnits()+",keyword:"+keyword);
+		    Log.i(TAG,"labelPinyinSearchUnit:"+labelPinyinSearchUnit.getPinyinUnits()+",keyword:"+keyword);
 			boolean match= T9Util.match(labelPinyinSearchUnit, keyword);
 			
 			if (true == match) {// search by LabelPinyinUnits;
 				AppInfo appInfo = baseAppInfos.get(i);
 				appInfo.setSearchByType(AppInfo.SearchByType.SearchByLabel);
 				appInfo.setMatchKeywords(labelPinyinSearchUnit.getMatchKeyword().toString());
-				appInfo.setMatchStartIndex(appInfo.getLabel().indexOf(appInfo.getMatchKeywords().toString()));
+				appInfo.setMatchStartIndex(appInfo.getTitle().indexOf(appInfo.getMatchKeywords().toString()));
 				appInfo.setMatchLength(appInfo.getMatchKeywords().length());
 				mT9SearchAppInfos.add(appInfo);
 
@@ -301,7 +157,7 @@ public class AppInfoHelper {
 		if(null==mBaseAllAppInfos){
 			mBaseAllAppInfos=new ArrayList<AppInfo>();
 		}
-		mBaseAllAppInfos.clear();
+		//mBaseAllAppInfos.clear();
 
 		if(null==mT9SearchAppInfos){
 			mT9SearchAppInfos=new ArrayList<AppInfo>();
@@ -316,48 +172,7 @@ public class AppInfoHelper {
 		
 		return;
 	}
-	
-	private AppInfo getAppInfo(PackageManager pm, PackageInfo packageInfo){
-		if((null==pm)||(null==packageInfo)){
-			return null;
-		}
-		AppInfo appInfo=new AppInfo();
-		appInfo.setIcon(packageInfo.applicationInfo.loadIcon(pm));
-		appInfo.setLabel((String)packageInfo.applicationInfo.loadLabel(pm));
-		appInfo.setPackageName(packageInfo.packageName);
-		return appInfo;
-		
-	}
 
-	private boolean isLoading(){
-		return ((null!=mLoadAppInfoTask)&&(mLoadAppInfoTask.getStatus()== Status.RUNNING));
-	}
-
-	private void parseAppInfo(List<AppInfo> appInfos){
-		Log.i(TAG, "parseAppInfo");
-
-		Log.i(TAG, "before appInfos.size()"+ appInfos.size());
-		mBaseAllAppInfos.clear();
-		mBaseAllAppInfos.addAll(appInfos);
-		Log.i(TAG, "after appInfos.size()"+ appInfos.size());
-
-		return;
-	}
-	
-	private String praseSortKey(String sortKey) {
-		if (null == sortKey || sortKey.length() <= 0) {
-			return null;
-		}
-
-		if ((sortKey.charAt(0) >= 'a' && sortKey.charAt(0) <= 'z')
-				|| (sortKey.charAt(0) >= 'A' && sortKey.charAt(0) <= 'Z')) {
-			return sortKey;
-		}
-
-		return String.valueOf(/*QuickAlphabeticBar.DEFAULT_INDEX_CHARACTER*/'#')
-				+ sortKey;
-	}
-	
 	private List<AppInfo> getBaseAppInfo(){
 		return mBaseAllAppInfos;
 	}

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.launcher3.AppInfo;
+import com.android.launcher3.FastBitmapDrawable;
 import com.android.launcher3.R;
 
 import java.util.List;
@@ -17,8 +19,6 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
     private Context mContext;
     private int mTextViewResourceId;
 
-    //private List<AppInfo> mAppInfos;
-
     public AppInfoAdapter(Context context, int textViewResourceId,
                           List<AppInfo> appInfos) {
         //这个父类的构造方法里传入appInfos就可以在AppInfo appInfo = getItem(position);
@@ -26,14 +26,12 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
         super(context, textViewResourceId, appInfos);
         mContext = context;
         mTextViewResourceId = textViewResourceId;
-        //mAppInfos = appInfos;
 
     }
 
     @SuppressLint("NewApi")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //View view = null;
         ViewHolder viewHolder;
         AppInfo appInfo = getItem(position);
         if (null == convertView) {
@@ -46,19 +44,18 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
                     .findViewById(R.id.label_text_view);
             convertView.setTag(viewHolder);
         } else {
-            //view = convertView;
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.mIconIv.setBackground(appInfo.getIcon());
+        viewHolder.mIconIv.setBackground(new FastBitmapDrawable(appInfo.getIconBitmap()));
         switch (appInfo.getSearchByType()) {
             case SearchByLabel:
-                ViewUtil.showTextHighlight(viewHolder.mLabelTv, appInfo.getLabel(),
+                ViewUtil.showTextHighlight(viewHolder.mLabelTv, appInfo.getTitle(),
                         appInfo.getMatchKeywords().toString());
 
                 break;
             case SearchByNull:
-                ViewUtil.showTextNormal(viewHolder.mLabelTv, appInfo.getLabel());
+                ViewUtil.showTextNormal(viewHolder.mLabelTv, appInfo.getTitle());
                 break;
             default:
                 break;

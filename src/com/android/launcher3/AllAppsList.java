@@ -89,6 +89,7 @@ public class AllAppsList {  //modify by zhaopenglin for hide app DWYQLSSB-77 201
         }
         data.add(info);
         added.add(info);
+
     }
 
     public void clear() {

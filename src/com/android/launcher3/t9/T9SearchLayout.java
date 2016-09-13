@@ -65,7 +65,7 @@ public class T9SearchLayout extends RelativeLayout implements T9View.T9ViewListe
 
                 t9_search_grid_view.setAdapter(mAppInfoAdapter);
             }
-        },2000);
+        },20);
 
     }
 

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.android.launcher3.AppInfo;
 import com.android.launcher3.R;
 
 public class AppUtil {

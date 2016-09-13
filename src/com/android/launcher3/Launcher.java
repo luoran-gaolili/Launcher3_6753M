@@ -1926,7 +1926,8 @@ public class Launcher extends Activity
                 // Reset AllApps to its initial state only if we are not in the middle of
                 // processing a multi-step drop
                 if (mAppsView != null && mWidgetsView != null &&
-                        mPendingAddInfo.container == ItemInfo.NO_ID) {
+                        mPendingAddInfo.container == ItemInfo.NO_ID
+                        && !isPreviewStates()) {//修改在编辑界面锁屏后背景是workspace界面
                     showWorkspace(false);
                 }
             } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
@@ -3768,6 +3769,7 @@ public class Launcher extends Activity
 //        Trace.traceBegin(Trace.TRACE_TAG_INPUT, "showWorkspace");
         if (LauncherLog.DEBUG) {
             LauncherLog.d(TAG, "showWorkspace: animated = " + animated + ", mState = " + mState);
+            //throw  new RuntimeException("33333");
         }
 
         ///M: ALPS02461704, fix widget quick add JE.

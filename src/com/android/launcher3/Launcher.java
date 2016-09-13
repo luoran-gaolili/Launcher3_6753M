@@ -2890,7 +2890,7 @@ public class Launcher extends Activity
         if (v instanceof CellLayout) {
             if (mWorkspace.isInOverviewMode()) {
                 showWorkspace(mWorkspace.indexOfChild(v), true);
-            }
+            }else doubleclick();//add by zhaopenglin for double click launch t9
         }
 
         Object tag = v.getTag();
@@ -2912,7 +2912,24 @@ public class Launcher extends Activity
         /// M: add systrace to analyze application launche time.
 //        Trace.traceEnd(Trace.TRACE_TAG_INPUT);
     }
+    //add by zhaopenglin for double click launch t9 start
+    private int count = 0;
+    private long firstClick = 0;
 
+    private void doubleclick() {
+        long temp = System.currentTimeMillis();
+        if(temp - firstClick > 300){
+            firstClick = temp;
+            count = 1;
+        }else {
+            count++;
+            if(2 == count) {
+                Intent intent = new Intent(Launcher.this, MainActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
+    //add by zhaopenglin for double click launch t9 end
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(View v, MotionEvent event) {
         return false;

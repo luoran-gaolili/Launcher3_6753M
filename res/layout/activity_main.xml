@@ -2,7 +2,8 @@
 <com.android.launcher3.t9.T9SearchLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#8e030a09">
 
     <TextView
         android:id="@+id/search_result_prompt_text_view"

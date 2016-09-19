@@ -2924,8 +2924,13 @@ public class Launcher extends Activity
         }else {
             count++;
             if(2 == count) {
-                Intent intent = new Intent(Launcher.this, MainActivity.class);
-                startActivity(intent);
+                BlurBehind.getInstance().execute(Launcher.this, new OnBlurCompleteListener() {
+                    @Override
+                    public void onBlurComplete() {
+                        Intent intent = new Intent(Launcher.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         }
     }

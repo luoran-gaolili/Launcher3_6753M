@@ -136,7 +136,8 @@
         <activity
             android:name=".t9.MainActivity"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/t9_app_name">
+            android:label="@string/t9_app_name"
+            android:theme="@android:style/Theme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

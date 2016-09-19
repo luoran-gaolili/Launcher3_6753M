@@ -145,7 +145,12 @@ public class Hotseat extends FrameLayout
         int y = getCellYFromOrder(mAllAppsButtonRank);
         CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x,y,1,1);
         lp.canReorder = false;
-        mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+        //modify by zhaopenglin for disableAllapp start
+        //mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+        if (!LauncherAppState.isDisableAllApps()){
+            mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+        }
+        //modify by zhaopenglin for disableAllapp end
     }
 
     @Override

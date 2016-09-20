@@ -127,14 +127,14 @@ public class T9View extends FrameLayout implements OnClickListener{
 		key9Btn.setText(getFormatString("9 WXYZ"));
 		key9Btn.setOnClickListener(this);
 
-		Button key10Btn = (Button)view.findViewById(R.id.key10BtnId);
+		Button key10Btn = (Button)view.findViewById(R.id.key10Back);
 		key10Btn.setOnClickListener(this);
 
 		Button key11Btn = (Button)view.findViewById(R.id.key0BtnId);
 		key11Btn.setText(getAlphaFormatString("0"));
 		key11Btn.setOnClickListener(this);
 
-		Button key12Btn = (Button)view.findViewById(R.id.key12BtnId);
+		Button key12Btn = (Button)view.findViewById(R.id.key12Del);
         key12Btn.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -167,8 +167,7 @@ public class T9View extends FrameLayout implements OnClickListener{
 			return;
 		}
         switch (v.getId()) {
-
-            case R.id.key12BtnId:
+            case R.id.key12Del:
                 deleteSingleNumChar();
                 break;
             case R.id.key0BtnId:
@@ -263,6 +262,7 @@ public class T9View extends FrameLayout implements OnClickListener{
 		 * @param curCharacter
 		 */
 		void DialInputTextChanged(String curCharacter);
+
 	}
 
 }

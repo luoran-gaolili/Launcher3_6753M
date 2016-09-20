@@ -117,9 +117,11 @@ import com.android.launcher3.compat.UserHandleCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.config.ProviderConfig;
 import com.android.launcher3.model.WidgetsModel;
+import com.android.launcher3.t9.AppInfoHelper;
 import com.android.launcher3.t9.MainActivity;
 import com.android.launcher3.t9.blurImage.BlurBehind;
 import com.android.launcher3.t9.blurImage.OnBlurCompleteListener;
+import com.android.launcher3.t9.util.T9View;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.Thunk;
@@ -290,6 +292,7 @@ public class Launcher extends Activity
 
     private View mAllAppsButton;
     private View mWidgetsButton;
+    private View t9View; //Add by zhaopenglin for t9 20160920
 
     private SearchDropTargetBar mSearchDropTargetBar;
 
@@ -1548,7 +1551,18 @@ public class Launcher extends Activity
         mWorkspace = (Workspace) mDragLayer.findViewById(R.id.workspace);
         mWorkspace.setPageSwitchListener(this);
         mPageIndicators = mDragLayer.findViewById(R.id.page_indicator);
+        //Add by zhaopenglin for t9 20160920 start
+        t9View = mInflater.inflate(R.layout.activity_main, null);
+        t9View.findViewById(R.id.key10Back).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exitT9View();
+            }
+        });
 
+        mDragLayer.addView(t9View);
+        t9View.setVisibility(View.INVISIBLE);
+        //Add by zhaopenglin for t9 20160920 end
         mLauncherView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         mWorkspaceBackgroundDrawable = getResources().getDrawable(R.drawable.workspace_bg);
@@ -2004,6 +2018,7 @@ public class Launcher extends Activity
                 // apps is nice and speedy.
                 observer.addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
                     private boolean mStarted = false;
+
                     public void onDraw() {
                         if (mStarted) return;
                         mStarted = true;
@@ -2015,14 +2030,14 @@ public class Launcher extends Activity
                         mWorkspace.postDelayed(mBuildLayersRunnable, 500);
                         final ViewTreeObserver.OnDrawListener listener = this;
                         mWorkspace.post(new Runnable() {
-                                public void run() {
-                                    if (mWorkspace != null &&
-                                            mWorkspace.getViewTreeObserver() != null) {
-                                        mWorkspace.getViewTreeObserver().
-                                                removeOnDrawListener(listener);
-                                    }
+                            public void run() {
+                                if (mWorkspace != null &&
+                                        mWorkspace.getViewTreeObserver() != null) {
+                                    mWorkspace.getViewTreeObserver().
+                                            removeOnDrawListener(listener);
                                 }
-                            });
+                            }
+                        });
                         return;
                     }
                 });
@@ -2177,6 +2192,7 @@ public class Launcher extends Activity
         if (DEBUG_RESUME_TIME) {
             startTime = System.currentTimeMillis();
         }
+        exitT9View();//Add by zhaopenglin for t9 20160920
         //add by zhaopenglin for hide app DWYQLSSB-77 20160617 start
         if (customizDialog.isShowing()) {
             customizDialog.dismiss();
@@ -2782,14 +2798,21 @@ public class Launcher extends Activity
 
         return super.dispatchKeyEvent(event);
     }
-
+    //Add by zhaopenglin for t9 20160920 start
+    private void exitT9View(){
+        if(t9View != null && t9View.getVisibility() == View.VISIBLE){
+            t9View.setVisibility(View.INVISIBLE);
+            showWorkspaceSearchAndHotseat();
+        }
+    }
+    //Add by zhaopenglin for t9 20160920 end
     @Override
     public void onBackPressed() {
         if (LauncherLog.DEBUG) {
             LauncherLog.d(TAG, "Back key pressed, mState = " + mState
-                + ", mOnResumeState = " + mOnResumeState);
+                    + ", mOnResumeState = " + mOnResumeState);
         }
-
+        exitT9View();//Add by zhaopenglin for t9 20160920
         if (mLauncherCallbacks != null && mLauncherCallbacks.handleBackPressed()) {
             return;
         }
@@ -2924,13 +2947,18 @@ public class Launcher extends Activity
         }else {
             count++;
             if(2 == count) {
-                BlurBehind.getInstance().execute(Launcher.this, new OnBlurCompleteListener() {
-                    @Override
-                    public void onBlurComplete() {
-                        Intent intent = new Intent(Launcher.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                });
+//                BlurBehind.getInstance().execute(Launcher.this, new OnBlurCompleteListener() {
+//                    @Override
+//                    public void onBlurComplete() {
+//                        Intent intent = new Intent(Launcher.this, MainActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+                //Add by zhaopenglin for t9 20160920 start
+                hideWorkspaceSearchAndHotseat();
+                t9View.setVisibility(View.VISIBLE);
+                AppInfoHelper.getInstance().setBaseAllAppInfos(LauncherModel.allAddAppItems);
+                //Add by zhaopenglin for t9 20160920 end
             }
         }
     }

@@ -143,8 +143,6 @@ public class AppInfoHelper {
 								+ mFirstNoT9SearchResultInput.toString() + "]"
 								+ ";searchlen=" + keyword.length() + "["
 								+ keyword + "]");
-			} else {
-
 			}
 		}else{
 			Collections.sort(mT9SearchAppInfos, AppInfo.mSearchComparator);

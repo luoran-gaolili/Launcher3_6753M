@@ -1,9 +1,12 @@
 package com.android.launcher3.t9;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -28,7 +31,7 @@ public class T9SearchLayout extends RelativeLayout implements T9View.T9ViewListe
     }
 
     public T9SearchLayout(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public T9SearchLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -65,8 +68,19 @@ public class T9SearchLayout extends RelativeLayout implements T9View.T9ViewListe
 
                 t9_search_grid_view.setAdapter(mAppInfoAdapter);
             }
-        },20);
-
+        }, 20);
+        //Add by zhaopenglin for t9 20160920 start
+        t9_search_grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setComponent(AppInfoHelper.getInstance()
+                        .getT9SearchAppInfos().get(position).componentName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+            }
+        });
+        //Add by zhaopenglin for t9 20160920 end
     }
 
     private void updateSearch(String search) {
@@ -122,5 +136,6 @@ public class T9SearchLayout extends RelativeLayout implements T9View.T9ViewListe
     public void DialInputTextChanged(String curCharacter) {
         updateSearch(curCharacter);
         refreshView();
+
     }
 }

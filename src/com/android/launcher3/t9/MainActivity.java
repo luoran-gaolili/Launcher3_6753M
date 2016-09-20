@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        mContext = getApplicationContext();
+        mContext = getContext();
         AppInfoHelper.getInstance().setBaseAllAppInfos(LauncherModel.allAddAppItems);
         BlurBehind.getInstance()//在你需要添加模糊或者透明的背景中只需要设置这几行简单的代码就可以了
                 .withAlpha(99)
@@ -31,4 +31,5 @@ public class MainActivity extends Activity {
     public static Context getContext() {
         return mContext;
     }
+
 }

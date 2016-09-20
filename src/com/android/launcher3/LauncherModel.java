@@ -195,10 +195,7 @@ public class LauncherModel extends BroadcastReceiver
 
     // sBgWidgetProviders is the set of widget providers including custom internal widgets
     public static HashMap<ComponentKey, LauncherAppWidgetProviderInfo> sBgWidgetProviders;
-    //add by zhaopenglin for disableAllapp start
-    private static final boolean UPGRADE_USE_MORE_APPS_FOLDER = false;
-    private boolean isUpgrade = false;
-    //add by zhaopenglin for disableAllapp end
+
     // sPendingPackages is a set of packages which could be on sdcard and are not available yet
     static final HashMap<UserHandleCompat, HashSet<String>> sPendingPackages =
             new HashMap<UserHandleCompat, HashSet<String>>();
@@ -1772,15 +1769,18 @@ public class LauncherModel extends BroadcastReceiver
 
                 // second step
                 if (DEBUG_LOADERS) Log.d(TAG, "step 2: loading all apps");
-                loadAndBindAllApps();
+                //单层结构的话allapp就只用加载数据不用绑定数据了
+                loadAllApps();
+//                loadAndBindAllApps();
             }
+            //下边这个判断放在这里很好，这个时候allapp数据已经加载（获得）好了，再做这个验证是否桌面上有
+            // 这个图标没有的话就加上，好处是万一消失了一个图标重启后就会重新添加上
             //add by zhaopenglin for disableAllapp start
-            if (LauncherAppState.isDisableAllApps())
+            if (LauncherAppState.isDisableAllApps()) {
                 // Ensure that all the applications that are in the system are
                 // represented on the home screen.
-                if (!UPGRADE_USE_MORE_APPS_FOLDER || !isUpgrade) {
-                    verifyApplications();
-                }
+                verifyApplications();
+            }
             //add by zhaopenglin for disableAllapp end
             // Clear out this reference, otherwise we end up holding it until all of the
             // callback runnables are done.
@@ -4030,6 +4030,7 @@ public class LauncherModel extends BroadcastReceiver
             for (AppInfo app : mBgAllAppsList.data) {
                 //这个方法看样子就是找app是不是已经在workspace上了
                 //不过我的疑问是为什么它返回了一个列表？
+                //解答：在双层结构中workspace上同一个应用的icon可能有多个
                 tmpInfos = getItemInfoForComponentName(app.componentName, app.user);
                 if (tmpInfos.isEmpty()) {
                     // We are missing an application icon, so add this to the workspace

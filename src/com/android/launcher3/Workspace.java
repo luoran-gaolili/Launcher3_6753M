@@ -4052,6 +4052,7 @@ public class Workspace extends PagedView
         }
         mDragOutline = null;
         mDragInfo = null;
+        mLauncher.showStatusBar();
     }
 
     /**

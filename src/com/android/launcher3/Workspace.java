@@ -2381,6 +2381,7 @@ public class Workspace extends PagedView
 
     public void beginDragShared(View child, Point relativeTouchPos, DragSource source,
             boolean accessible) {
+        Log.i("zhaosearch","beginDragShared");
         child.clearFocus();
         child.setPressed(false);
 
@@ -4052,7 +4053,7 @@ public class Workspace extends PagedView
         }
         mDragOutline = null;
         mDragInfo = null;
-        mLauncher.showStatusBar();
+//        mLauncher.showStatusBar();
     }
 
     /**

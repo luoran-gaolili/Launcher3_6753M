@@ -226,7 +226,7 @@ public class DragController {
         if (PROFILE_DRAWING_DURING_DRAG) {
             android.os.Debug.startMethodTracing("Launcher");
         }
-
+        mLauncher.hideStatusBar();//add by zhaopenglin for hideStatus when startDrag 20160921
         // Hide soft keyboard, if visible
         if (mInputMethodManager == null) {
             mInputMethodManager = (InputMethodManager)
@@ -404,6 +404,7 @@ public class DragController {
             LauncherLog.d(TAG, "endDrag: mDragging = " + mDragging
                 + ", mDragObject = " + mDragObject);
         }
+        mLauncher.showStatusBar();//add by zhaopenglin for showStatusBar after endDrag 20160921
         if (mDragging) {
             mDragging = false;
             mIsAccessibleDrag = false;

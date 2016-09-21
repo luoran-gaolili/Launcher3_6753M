@@ -3629,7 +3629,7 @@ public class Launcher extends Activity
                                 longClickCellInfo.cellX,
                                 longClickCellInfo.cellY));
                 if (!(itemUnderLongClick instanceof Folder || isAllAppsButton)) {
-                    hideStatusBar();
+//                    hideStatusBar();
                     // User long pressed on an item
                     mWorkspace.startDrag(longClickCellInfo);
                 }

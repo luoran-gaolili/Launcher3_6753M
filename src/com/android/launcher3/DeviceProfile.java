@@ -25,6 +25,7 @@ import android.graphics.Paint.FontMetrics;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -202,7 +203,7 @@ public class DeviceProfile {
         searchBarSpaceHeightPx = getSearchBarTopOffset()
                 + res.getDimensionPixelSize(R.dimen.dynamic_grid_search_bar_height);
         //将searchBarSpaceHeightPx改小一些使得workspace上方空隙少一些
-        if(res.getBoolean(R.bool.is_rm_qsb)) searchBarSpaceHeightPx /= 3;
+        if(res.getBoolean(R.bool.is_rm_qsb)) searchBarSpaceHeightPx /= 2;
         // Calculate the actual text height
         Paint textPaint = new Paint();
         textPaint.setTextSize(iconTextSizePx);
@@ -408,6 +409,7 @@ public class DeviceProfile {
             LinearLayout targets = (LinearLayout) searchBar.findViewById(R.id.drag_target_bar);
             targets.getLayoutParams().width = searchBarSpaceWidthPx;
         }
+        lp.topMargin -= 40;// 把删除按钮往上调
         searchBar.setLayoutParams(lp);
 
         // Layout the workspace
@@ -415,6 +417,9 @@ public class DeviceProfile {
         lp = (FrameLayout.LayoutParams) workspace.getLayoutParams();
         lp.gravity = Gravity.CENTER;
         Rect padding = getWorkspacePadding(isLayoutRtl);
+        //把workspace的区域调大
+        lp.topMargin -= 30;
+        lp.bottomMargin -=15;
         workspace.setLayoutParams(lp);
         workspace.setPadding(padding.left, padding.top, padding.right, padding.bottom);
         workspace.setPageSpacing(getWorkspacePageSpacing(isLayoutRtl));

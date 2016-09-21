@@ -4035,8 +4035,12 @@ public class Workspace extends PagedView
             if (target != this && mDragInfo != null) {
                 //这句话的修改目的是修改拖动icon到应用信息后workspace上的icon消失
                 //就是这个拖拽结束方法里执行了下边这句话把图标删除了。
-//                removeWorkspaceItem(mDragInfo.cell);
-                mDragInfo.cell.setVisibility(VISIBLE);
+                //20160921 修改为下边的if else 是为了在workspace上删除widget
+                if(InfoDropTarget.supportsDrop(mLauncher,mDragInfo.cell)){
+                    mDragInfo.cell.setVisibility(VISIBLE);
+                }else {
+                    removeWorkspaceItem(mDragInfo.cell);
+                }
             }
         /// M: [ALPS01257939] Check if target is null.
         } else if (mDragInfo != null && target != null) {

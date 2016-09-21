@@ -54,7 +54,9 @@ public class DeleteDropTarget extends ButtonDropTarget {
 
     @Override
     protected boolean supportsDrop(DragSource source, Object info) {
-        return source.supportsDeleteDropTarget() && supportsDrop(info);
+        return source.supportsDeleteDropTarget()
+                || (info instanceof LauncherAppWidgetInfo)//添加这个是为了拖动workspace上的widget上边的“删除”按钮显示
+                && supportsDrop(info);
     }
 
     @Override

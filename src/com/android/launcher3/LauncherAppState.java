@@ -146,7 +146,7 @@ public class LauncherAppState {
 
     }
     //add by zhaopenglin for disableAllapp start
-    public static boolean isDisableAllApps() {
+    public static boolean isHideAllApps() {
         return true;
     }
     //add by zhaopenglin for disableAllapp end

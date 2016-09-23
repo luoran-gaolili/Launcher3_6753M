@@ -68,7 +68,6 @@ import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.ManagedProfileHeuristic;
 import com.android.launcher3.util.Thunk;
 
-import com.mediatek.launcher3.ext.AllApps;
 import com.mediatek.launcher3.ext.LauncherLog;
 
 import java.lang.ref.WeakReference;
@@ -1776,7 +1775,7 @@ public class LauncherModel extends BroadcastReceiver
             //下边这个判断放在这里很好，这个时候allapp数据已经加载（获得）好了，再做这个验证是否桌面上有
             // 这个图标没有的话就加上，好处是万一消失了一个图标重启后就会重新添加上
             //add by zhaopenglin for disableAllapp start
-            if (LauncherAppState.isDisableAllApps()) {
+            if (LauncherAppState.isHideAllApps()) {
                 // Ensure that all the applications that are in the system are
                 // represented on the home screen.
                 verifyApplications();

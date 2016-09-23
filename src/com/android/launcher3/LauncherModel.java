@@ -3364,6 +3364,7 @@ public class LauncherModel extends BroadcastReceiver
                     new HashMap<ComponentName, AppInfo>();
 
             if (added != null) {
+                addAndBindAddedWorkspaceItems(context,added);//添加这个就会使新安装的应用在桌面上创建新的icon
                 addAppsToAllApps(context, added);
                 for (AppInfo ai : added) {
                     addedOrUpdatedApps.put(ai.componentName, ai);
